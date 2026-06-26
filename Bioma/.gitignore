@@ -1,0 +1,28 @@
+# Node.js / React Frontend
+ecosystemdb-client/node_modules/
+ecosystemdb-client/dist/
+ecosystemdb-client/build/
+ecosystemdb-client/.env
+ecosystemdb-client/.env.local
+ecosystemdb-client/.env.*.local
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+
+# .NET / C# Backend
+Bioma/bin/
+Bioma/obj/
+Bioma/appsettings.Development.json
+Bioma/appsettings.*.json
+
+# Visual Studio & IDEs
+.vs/
+.vscode/
+.idea/
+*.user
+*.suo
+*.sln.docstates
+
+# OS generated files
+.DS_Store
+Thumbs.db
