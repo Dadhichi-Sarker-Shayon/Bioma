@@ -26,3 +26,8 @@ Bioma/appsettings.*.json
 # OS generated files
 .DS_Store
 Thumbs.db
+
+# Generated SQL Data and Temp Scripts
+Bioma/populate*.sql
+Bioma/check_tables.sql
+Bioma/test.sql
