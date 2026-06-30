@@ -69,6 +69,11 @@ namespace Bioma.Services
                     var stmt = rawStmt.Trim();
                     if (string.IsNullOrWhiteSpace(stmt)) continue;
 
+                    if (stmt.EndsWith(";") && !stmt.EndsWith("END;", StringComparison.OrdinalIgnoreCase))
+                    {
+                        stmt = stmt.Substring(0, stmt.Length - 1).Trim();
+                    }
+
                     currentStatement = stmt;
                     using var cmd = new OracleCommand(stmt, conn);
                     cmd.ExecuteNonQuery();
