@@ -14,6 +14,7 @@ Bioma/bin/
 Bioma/obj/
 Bioma/appsettings.Development.json
 Bioma/appsettings.*.json
+Bioma/Bioma.csproj.user
 
 # Visual Studio & IDEs
 .vs/
@@ -27,7 +28,14 @@ Bioma/appsettings.*.json
 .DS_Store
 Thumbs.db
 
-# Generated SQL Data and Temp Scripts
-Bioma/populate*.sql
+# Temporary test/check scripts (not part of project)
 Bioma/check_tables.sql
 Bioma/test.sql
+Bioma/clean_old_schema.sql
+
+# Patch scripts (local use only)
+Bioma/patch.py
+
+# Data generation scripts (local use only)
+Bioma/generatePopulation.js
+Bioma/generateAdditionalData.js
