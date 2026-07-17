@@ -75,6 +75,29 @@ namespace Bioma.Controllers
             }
         }
 
+        [HttpPost("update-images")]
+        public IActionResult UpdateImages()
+        {
+            try
+            {
+                string scriptPath = Path.Combine(_env.ContentRootPath, "update_images.sql");
+                if (!System.IO.File.Exists(scriptPath))
+                    return NotFound(new { error = "update_images.sql not found" });
+
+                string sql = System.IO.File.ReadAllText(scriptPath);
+                _db.ExecuteLargeScript(sql);
+
+                var dt = _db.Query("SELECT COUNT(*) as cnt FROM Species_Encyclopedia WHERE Image_URL LIKE '%unsplash%'");
+                int updated = Convert.ToInt32(dt.Rows[0]["cnt"]);
+
+                return Ok(new { message = "Images updated", unsplashCount = updated });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { error = ex.Message });
+            }
+        }
+
         [HttpPost("populate")]
         public IActionResult Populate()
         {
