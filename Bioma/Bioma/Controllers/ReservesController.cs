@@ -8,7 +8,6 @@ namespace Bioma.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize]
     public class ReservesController : ControllerBase
     {
         private readonly DatabaseService _db;
@@ -56,6 +55,7 @@ namespace Bioma.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public IActionResult CreateReserve([FromBody] ReserveDto dto)
         {
             try
@@ -83,6 +83,7 @@ namespace Bioma.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize]
         public IActionResult UpdateReserve(int id, [FromBody] ReserveDto dto)
         {
             try
@@ -113,6 +114,7 @@ namespace Bioma.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize]
         public IActionResult DeleteReserve(int id)
         {
             try

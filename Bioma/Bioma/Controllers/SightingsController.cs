@@ -10,7 +10,6 @@ namespace Bioma.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize]
     public class SightingsController : ControllerBase
     {
         private readonly DatabaseService _db;
@@ -108,6 +107,7 @@ namespace Bioma.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public IActionResult CreateSighting([FromBody] SightingCreateDto dto)
         {
             try

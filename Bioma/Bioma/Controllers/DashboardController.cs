@@ -7,7 +7,6 @@ namespace Bioma.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize]
     public class DashboardController : ControllerBase
     {
         private readonly DatabaseService _db;
