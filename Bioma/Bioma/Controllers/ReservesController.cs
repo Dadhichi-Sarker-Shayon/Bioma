@@ -54,6 +54,90 @@ namespace Bioma.Controllers
             }
         }
 
+        [HttpGet("{id}")]
+        public IActionResult GetReserve(int id)
+        {
+            try
+            {
+                var sql = @"
+                    SELECT r.Reserve_ID, r.Reserve_Name, r.Region_ID, r.Total_Area_SqKm,
+                           r.Annual_Budget_USD, r.Established_Year, r.Reserve_Type,
+                           reg.Region_Name, reg.Country, reg.Biome_Name, reg.Climate_Zone,
+                           reg.Area_SqKm AS RegionArea, reg.Is_Protected
+                    FROM Reserves r
+                    JOIN Regions reg ON r.Region_ID = reg.Region_ID
+                    WHERE r.Reserve_ID = :id";
+                var dt = _db.Query(sql, new Dictionary<string, object> { { ":id", id } });
+
+                if (dt.Rows.Count == 0)
+                    return NotFound(new { error = "Reserve not found." });
+
+                var row = dt.Rows[0];
+
+                // Get sighting stats
+                var sightingSql = @"
+                    SELECT COUNT(*) as TotalSightings,
+                           COUNT(DISTINCT Organism_ID) as UniqueSpecies,
+                           SUM(CASE WHEN Health_Status IN ('Injured','Malnourished','Dead') THEN 1 ELSE 0 END) as Unhealthy
+                    FROM Sighting_Logs WHERE Reserve_ID = :id";
+                var sightingDt = _db.Query(sightingSql, new Dictionary<string, object> { { ":id", id } });
+                var sightings = sightingDt.Rows[0];
+
+                // Get recent sightings
+                var recentSql = @"
+                    SELECT s.Sighting_ID, s.Sighting_Timestamp, s.Quantity_Observed, s.Health_Status, s.Observation_Notes,
+                           o.Common_Name, o.Scientific_Name, o.Conservation_Status
+                    FROM Sighting_Logs s
+                    JOIN Organisms o ON s.Organism_ID = o.Organism_ID
+                    WHERE s.Reserve_ID = :id
+                    ORDER BY s.Sighting_Timestamp DESC";
+                var recentDt = _db.Query(recentSql, new Dictionary<string, object> { { ":id", id } });
+                var recentSightings = new List<object>();
+                foreach (DataRow sr in recentDt.Rows)
+                {
+                    recentSightings.Add(new
+                    {
+                        sightingId = sr["Sighting_ID"],
+                        timestamp = sr["Sighting_Timestamp"],
+                        quantity = sr["Quantity_Observed"],
+                        healthStatus = sr["Health_Status"]?.ToString(),
+                        notes = sr["Observation_Notes"]?.ToString(),
+                        speciesName = sr["Common_Name"]?.ToString(),
+                        scientificName = sr["Scientific_Name"]?.ToString(),
+                        conservationStatus = sr["Conservation_Status"]?.ToString()
+                    });
+                }
+
+                return Ok(new
+                {
+                    reserveId = row["Reserve_ID"],
+                    reserveName = row["Reserve_Name"]?.ToString(),
+                    regionId = row["Region_ID"],
+                    regionName = row["Region_Name"]?.ToString(),
+                    country = row["Country"]?.ToString(),
+                    biomeName = row["Biome_Name"]?.ToString(),
+                    climateZone = row["Climate_Zone"]?.ToString(),
+                    totalAreaSqKm = row["Total_Area_SqKm"],
+                    annualBudgetUsd = row["Annual_Budget_USD"],
+                    establishedYear = row["Established_Year"],
+                    reserveType = row["Reserve_Type"]?.ToString(),
+                    regionArea = row["RegionArea"],
+                    isProtected = row["Is_Protected"]?.ToString(),
+                    stats = new
+                    {
+                        totalSightings = sightings["TotalSightings"],
+                        uniqueSpecies = sightings["UniqueSpecies"],
+                        unhealthySightings = sightings["Unhealthy"]
+                    },
+                    recentSightings
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { error = ex.Message });
+            }
+        }
+
         [HttpPost]
         [Authorize]
         public IActionResult CreateReserve([FromBody] ReserveDto dto)

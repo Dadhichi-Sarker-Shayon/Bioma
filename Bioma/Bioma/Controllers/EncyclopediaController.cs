@@ -32,26 +32,28 @@ namespace Bioma.Controllers
 
                 if (!string.IsNullOrWhiteSpace(search))
                 {
-                    sql += " AND (UPPER(o.Common_Name) LIKE :search OR UPPER(o.Scientific_Name) LIKE :search)";
-                    parms.Add(":search", $"%{search.Trim().ToUpper()}%");
+                    var searchTerm = $"%{search.Trim().ToUpper()}%";
+                    sql += " AND (UPPER(o.Common_Name) LIKE :p_search1 OR UPPER(o.Scientific_Name) LIKE :p_search2)";
+                    parms.Add(":p_search1", searchTerm);
+                    parms.Add(":p_search2", searchTerm);
                 }
 
                 if (!string.IsNullOrWhiteSpace(status))
                 {
-                    sql += " AND o.Conservation_Status = :status";
-                    parms.Add(":status", status.Trim());
+                    sql += " AND o.Conservation_Status = :p_status";
+                    parms.Add(":p_status", status.Trim());
                 }
 
                 if (!string.IsNullOrWhiteSpace(diet))
                 {
-                    sql += " AND se.Diet_Type = :diet";
-                    parms.Add(":diet", diet.Trim());
+                    sql += " AND se.Diet_Type = :p_diet";
+                    parms.Add(":p_diet", diet.Trim());
                 }
 
                 if (!string.IsNullOrWhiteSpace(kingdom))
                 {
-                    sql += " AND o.Kingdom_Type = :kingdom";
-                    parms.Add(":kingdom", kingdom.Trim());
+                    sql += " AND o.Kingdom_Type = :p_kingdom";
+                    parms.Add(":p_kingdom", kingdom.Trim());
                 }
 
                 if (!string.IsNullOrWhiteSpace(tags))
@@ -65,7 +67,7 @@ namespace Bioma.Controllers
                         var tagParamsList = new List<string>();
                         for (int i = 0; i < tagList.Count; i++)
                         {
-                            var paramName = $":tag{i}";
+                            var paramName = $":p_tag{i}";
                             tagParamsList.Add(paramName);
                             parms.Add(paramName, tagList[i]);
                         }
@@ -76,9 +78,9 @@ namespace Bioma.Controllers
                             JOIN Tags t ON ot.Tag_ID = t.Tag_ID
                             WHERE t.Tag_Name IN ({string.Join(", ", tagParamsList)})
                             GROUP BY ot.Organism_ID
-                            HAVING COUNT(DISTINCT t.Tag_Name) = :tagCount
+                            HAVING COUNT(DISTINCT t.Tag_Name) = :p_tagCount
                         )";
-                        parms.Add(":tagCount", tagList.Count);
+                        parms.Add(":p_tagCount", tagList.Count);
                     }
                 }
 
@@ -86,18 +88,37 @@ namespace Bioma.Controllers
 
                 var dt = _db.Query(sql, parms);
 
-                // Fetch tags
+                // Fetch ALL organism-tag mappings once, then filter in memory
                 var tagsSql = @"
                     SELECT ot.Organism_ID, t.Tag_Name, t.Tag_Color
                     FROM Organism_Tags ot
                     JOIN Tags t ON ot.Tag_ID = t.Tag_ID";
                 var tagsDt = _db.Query(tagsSql);
 
+                // Build a lookup dictionary for fast tag matching
+                var tagLookup = new Dictionary<int, List<object>>();
+                foreach (DataRow tagRow in tagsDt.Rows)
+                {
+                    var orgId = Convert.ToInt32(tagRow["ORGANISM_ID"]);
+                    if (!tagLookup.ContainsKey(orgId))
+                        tagLookup[orgId] = new List<object>();
+                    tagLookup[orgId].Add(new
+                    {
+                        TagName = tagRow["TAG_NAME"]?.ToString() ?? "",
+                        TagColor = tagRow["TAG_COLOR"]?.ToString() ?? ""
+                    });
+                }
+
                 var speciesList = new List<object>();
                 foreach (DataRow row in dt.Rows)
                 {
                     var organismId = Convert.ToInt32(row["Organism_ID"]);
-                    var species = new 
+
+                    var speciesTags = new List<object>();
+                    if (tagLookup.ContainsKey(organismId))
+                        speciesTags = tagLookup[organismId];
+
+                    speciesList.Add(new
                     {
                         OrganismId = organismId,
                         ScientificName = row["Scientific_Name"]?.ToString() ?? "",
@@ -109,20 +130,8 @@ namespace Bioma.Controllers
                         DietType = row["Diet_Type"] == DBNull.Value ? null : row["Diet_Type"]?.ToString(),
                         FunFact = row["Fun_Fact"] == DBNull.Value ? null : row["Fun_Fact"]?.ToString(),
                         Description = row["Description"] == DBNull.Value ? null : row["Description"]?.ToString(),
-                        Tags = new List<object>()
-                    };
-
-                    var speciesTags = tagsDt.Select($"Organism_ID = {organismId}");
-                    foreach (var tagRow in speciesTags)
-                    {
-                        species.Tags.Add(new 
-                        {
-                            TagName = tagRow["Tag_Name"]?.ToString() ?? "",
-                            TagColor = tagRow["Tag_Color"]?.ToString() ?? ""
-                        });
-                    }
-
-                    speciesList.Add(species);
+                        Tags = speciesTags
+                    });
                 }
 
                 return Ok(speciesList);
