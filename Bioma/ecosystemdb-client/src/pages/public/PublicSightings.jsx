@@ -46,9 +46,9 @@ const PublicSightings = () => {
                 <div style={{ fontSize: '0.75rem', color: '#2980b9', fontWeight: 600, marginBottom: '0.375rem' }}>
                   {formatDate(sighting.timestamp)}
                 </div>
-                <div style={{ fontSize: '2rem', marginBottom: '0.375rem' }}>
-                  {sighting.quantityObserved > 1 ? '👀' : '👁️'}
-                </div>
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#2980b9" strokeWidth="1.5" style={{ margin: '0 auto 0.375rem' }}>
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
+                </svg>
                 <div style={{ fontSize: '0.7rem', color: '#999' }}>Qty: {sighting.quantityObserved}</div>
               </div>
 

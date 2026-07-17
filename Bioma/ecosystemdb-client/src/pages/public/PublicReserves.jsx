@@ -42,7 +42,10 @@ const PublicReserves = () => {
         <div style={{ textAlign: 'center', padding: '4rem 0', color: '#999' }}>Loading...</div>
       ) : filteredReserves.length === 0 ? (
         <div className="card" style={{ padding: '4rem 2rem', textAlign: 'center' }}>
-          <h3 style={{ marginBottom: '0.5rem' }}>No reserves found</h3>
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#ccc" strokeWidth="1.5" style={{ margin: '0 auto 1rem' }}>
+            <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/>
+          </svg>
+          <h3 style={{ marginBottom: '0.5rem', color: '#666' }}>No reserves found</h3>
           <p style={{ color: '#999' }}>Try adjusting your search.</p>
         </div>
       ) : (
@@ -56,7 +59,7 @@ const PublicReserves = () => {
               <div style={{ color: '#666', fontSize: '0.85rem', marginBottom: '1rem' }}>
                 {reserve.regionName || `Region ${reserve.regionId}`}
               </div>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem', marginTop: 'auto', padding: '0.75rem', background: '#f8f9fa', borderRadius: '4px' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem', marginTop: 'auto', padding: '0.75rem', background: '#f8f9fa', borderRadius: '4px', border: '1px solid #e8eaed' }}>
                 <div>
                   <div style={{ fontSize: '0.65rem', color: '#999', textTransform: 'uppercase' }}>Established</div>
                   <div style={{ fontWeight: 600, fontSize: '0.9rem' }}>{reserve.establishedYear || '—'}</div>

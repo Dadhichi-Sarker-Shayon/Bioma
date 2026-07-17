@@ -123,7 +123,7 @@ const TaxonomyTree = () => {
       ) : error ? (
         <div className="badge badge-danger">{error}</div>
       ) : (
-        <div className="card" style={{ padding: '1.5rem' }}>
+        <div className="card" style={{ padding: '1.5rem', background: 'white', border: '1px solid #dde1e6' }}>
           {treeData.map(rootNode => (
             <TaxonomyTreeNode key={rootNode.organismId} node={rootNode} />
           ))}

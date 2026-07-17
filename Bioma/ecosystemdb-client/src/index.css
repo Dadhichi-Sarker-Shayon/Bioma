@@ -1,7 +1,8 @@
 :root {
   --header-bg: #1a3a5c;
   --sidebar-bg: #2980b9;
-  --content-bg: #ffffff;
+  --content-bg: #f0f2f5;
+  --card-bg: #ffffff;
   --footer-bg: #1a3a5c;
 
   --text-primary: #1a1a1a;
@@ -13,7 +14,7 @@
   --accent-light: #3498db;
 
   --border-color: #d0d0d0;
-  --border-light: #e8e8e8;
+  --border-light: #dde1e6;
 
   --danger: #e74c3c;
   --success: #27ae60;
@@ -73,12 +74,12 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .btn-secondary {
-  background: var(--content-bg);
+  background: var(--card-bg);
   color: var(--text-primary);
 }
 
 .btn-secondary:hover {
-  background: #f0f0f0;
+  background: #e8eaed;
 }
 
 .btn-danger {
@@ -107,7 +108,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .form-input, .form-select, .form-textarea {
   width: 100%;
-  background: var(--content-bg);
+  background: var(--card-bg);
   border: 1px solid var(--border-color);
   color: var(--text-primary);
   border-radius: var(--radius-md);
@@ -272,15 +273,17 @@ h1, h2, h3, h4, h5, h6 {
 
 /* ── Cards ── */
 .card {
-  background: var(--content-bg);
+  background: var(--card-bg);
   border: 1px solid var(--border-light);
   border-radius: var(--radius-md);
   padding: 1.25rem;
   transition: var(--transition);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
 }
 
 .card:hover {
-  box-shadow: var(--shadow-sm);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  border-color: #c8ccd2;
 }
 
 .card-title {
@@ -298,12 +301,40 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--text-primary);
 }
 
+/* ── Species Card ── */
+.species-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  transition: var(--transition);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+
+.species-card:hover {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+  transform: translateY(-2px);
+}
+
+.species-card-img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  background: #e8eaed;
+  display: block;
+}
+
+.species-card-body {
+  padding: 1rem;
+}
+
 /* ── Tables ── */
 .table-container {
   width: 100%;
   overflow-x: auto;
   border: 1px solid var(--border-light);
   border-radius: var(--radius-md);
+  background: var(--card-bg);
 }
 
 .table {
@@ -314,7 +345,7 @@ h1, h2, h3, h4, h5, h6 {
 .table th {
   text-align: left;
   padding: 0.75rem 1rem;
-  background: #f5f7fa;
+  background: #f0f2f5;
   border-bottom: 1px solid var(--border-light);
   color: var(--text-secondary);
   font-weight: 600;
@@ -403,13 +434,65 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .modal-content {
-  background: var(--content-bg);
+  background: var(--card-bg);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-md);
   width: 100%;
   max-width: 600px;
   max-height: 90vh;
   overflow-y: auto;
+}
+
+/* ── Filter Sidebar (Blue) ── */
+.filter-sidebar {
+  background: var(--sidebar-bg);
+  color: white;
+  border-radius: var(--radius-md);
+  padding: 1.25rem;
+  position: sticky;
+  top: 1rem;
+}
+
+.filter-sidebar .form-label {
+  color: rgba(255,255,255,0.8);
+}
+
+.filter-sidebar .form-input,
+.filter-sidebar .form-select {
+  background: rgba(255,255,255,0.15);
+  border-color: rgba(255,255,255,0.25);
+  color: white;
+}
+
+.filter-sidebar .form-input::placeholder {
+  color: rgba(255,255,255,0.5);
+}
+
+.filter-sidebar .form-input:focus,
+.filter-sidebar .form-select:focus {
+  border-color: white;
+  box-shadow: 0 0 0 2px rgba(255,255,255,0.2);
+}
+
+.filter-sidebar .btn-secondary {
+  background: rgba(255,255,255,0.15);
+  color: white;
+  border-color: rgba(255,255,255,0.25);
+}
+
+.filter-sidebar .btn-secondary:hover {
+  background: rgba(255,255,255,0.25);
+}
+
+/* ── Image fallback ── */
+.img-fallback {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #e8eaed 0%, #d0d4da 100%);
+  color: #999;
 }
 
 /* ── Sidebar footer ── */
