@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Bioma.Services;
 using Bioma.Models;
@@ -7,6 +8,7 @@ namespace Bioma.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class DistributionsController : ControllerBase
     {
         private readonly DatabaseService _db;

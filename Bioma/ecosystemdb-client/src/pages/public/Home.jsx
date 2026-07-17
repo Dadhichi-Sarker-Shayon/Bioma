@@ -1,22 +1,31 @@
 import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
+import api from '../../api';
 
 const Home = () => {
   const [stats, setStats] = useState({ species: 0, reserves: 0, sightings: 0 });
 
   useEffect(() => {
-    // In a real app we might fetch global stats here.
-    // For now we'll just simulate loading them.
-    setStats({
-      species: 12450,
-      reserves: 340,
-      sightings: 154200
-    });
+    const fetchStats = async () => {
+      try {
+        const [statsRes, reservesRes] = await Promise.all([
+          api.get('/dashboard/stats'),
+          api.get('/reserves'),
+        ]);
+        setStats({
+          species: statsRes.data.totalSpecies || 0,
+          reserves: reservesRes.data.length || statsRes.data.totalReserves || 0,
+          sightings: statsRes.data.totalSightings || 0,
+        });
+      } catch {
+        setStats({ species: 0, reserves: 0, sightings: 0 });
+      }
+    };
+    fetchStats();
   }, []);
 
   return (
     <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 2rem' }}>
-      {/* Hero Section */}
       <section style={{ 
         display: 'flex', 
         flexDirection: 'column', 
@@ -71,7 +80,6 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Global Stats */}
       <section style={{ marginBottom: '6rem' }}>
         <div className="glass-panel" style={{ padding: '3rem', display: 'flex', justifyContent: 'space-around', flexWrap: 'wrap', gap: '2rem' }}>
           <div style={{ textAlign: 'center' }}>
@@ -97,7 +105,6 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Features Grid */}
       <section style={{ marginBottom: '6rem' }}>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem' }}>
           
@@ -155,7 +162,6 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Newsletter / CTA */}
       <section className="glass-panel" style={{ padding: '4rem 2rem', textAlign: 'center', borderRadius: 'var(--radius-lg)', background: 'linear-gradient(rgba(26, 29, 36, 0.8), rgba(15, 17, 21, 0.9))' }}>
         <h2 style={{ fontSize: '2rem', marginBottom: '1rem' }}>Join the Conservation Effort</h2>
         <p style={{ color: 'var(--text-secondary)', maxWidth: '600px', margin: '0 auto 2rem' }}>

@@ -17,6 +17,8 @@ appsettings.*.json
 *.user
 *.suo
 *.sln.docstates
+*.http
+Bioma/Bioma.csproj.user
 
 # Visual Studio & IDEs
 .vs/

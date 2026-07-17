@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace Bioma.Models
 {
     // ──────────────────────────────────────────────
@@ -14,22 +16,31 @@ namespace Bioma.Models
 
     public class LoginDto
     {
+        [Required]
         public string Username { get; set; } = "";
+        [Required]
         public string Password { get; set; } = "";
     }
 
     public class AdminCreateDto
     {
+        [Required, MinLength(3), MaxLength(50)]
         public string Username { get; set; } = "";
+        [Required, MinLength(6), MaxLength(100)]
         public string Password { get; set; } = "";
+        [MaxLength(100)]
         public string? FullName { get; set; }
+        [EmailAddress, MaxLength(100)]
         public string? Email { get; set; }
     }
 
     public class AdminUpdateDto
     {
+        [MaxLength(100)]
         public string? FullName { get; set; }
+        [EmailAddress, MaxLength(100)]
         public string? Email { get; set; }
+        [MinLength(6), MaxLength(100)]
         public string? Password { get; set; }
     }
 
@@ -39,11 +50,16 @@ namespace Bioma.Models
     public class OrganismDto
     {
         public int OrganismId { get; set; }
+        [Required, MaxLength(100)]
         public string ScientificName { get; set; } = "";
+        [MaxLength(100)]
         public string? CommonName { get; set; }
+        [Required]
         public string RankName { get; set; } = "";
         public int? ParentId { get; set; }
+        [MaxLength(20)]
         public string? KingdomType { get; set; }
+        [MaxLength(10)]
         public string? ConservationStatus { get; set; }
         public int? DiscoveryYear { get; set; }
         public List<OrganismDto> Children { get; set; } = new();
@@ -54,15 +70,23 @@ namespace Bioma.Models
         public int EncyclopediaId { get; set; }
         public int OrganismId { get; set; }
         public string? Description { get; set; }
+        [MaxLength(20)]
         public string? DietType { get; set; }
+        [MaxLength(255)]
         public string? DietDetails { get; set; }
+        [MaxLength(255)]
         public string? PhysicalDescription { get; set; }
         public decimal? AvgHeightCm { get; set; }
         public decimal? AvgLengthCm { get; set; }
+        [MaxLength(255)]
         public string? HabitatBehavior { get; set; }
+        [MaxLength(255)]
         public string? ReproductionInfo { get; set; }
+        [MaxLength(255)]
         public string? NativeRangeDescription { get; set; }
+        [MaxLength(500)]
         public string? ImageUrl { get; set; }
+        [MaxLength(500)]
         public string? FunFact { get; set; }
         public DateTime? LastUpdated { get; set; }
     }
@@ -83,12 +107,16 @@ namespace Bioma.Models
     public class RegionDto
     {
         public int RegionId { get; set; }
+        [Required, MaxLength(100)]
         public string RegionName { get; set; } = "";
+        [Required, MaxLength(100)]
         public string Country { get; set; } = "";
+        [MaxLength(100)]
         public string? BiomeName { get; set; }
+        [MaxLength(100)]
         public string? ClimateZone { get; set; }
-        public decimal? AreaSqKm { get; set; }
-        public string? IsProtected { get; set; } // 'Y' or 'N'
+        public decimal? AreaSqKM { get; set; }
+        public string? IsProtected { get; set; }
     }
 
     public class SpeciesDistributionDto
@@ -116,12 +144,14 @@ namespace Bioma.Models
     public class ReserveDto
     {
         public int ReserveId { get; set; }
+        [Required, MaxLength(100)]
         public string ReserveName { get; set; } = "";
         public int? RegionId { get; set; }
         public string? RegionName { get; set; }
         public decimal? TotalAreaSqKm { get; set; }
         public decimal? AnnualBudgetUsd { get; set; }
         public int? EstablishedYear { get; set; }
+        [MaxLength(100)]
         public string? ReserveType { get; set; }
     }
 
@@ -140,7 +170,9 @@ namespace Bioma.Models
         public string? AdminName { get; set; }
         public DateTime SightingTimestamp { get; set; }
         public int QuantityObserved { get; set; }
+        [Required]
         public string HealthStatus { get; set; } = "";
+        [MaxLength(500)]
         public string? ObservationNotes { get; set; }
     }
 
@@ -150,6 +182,7 @@ namespace Bioma.Models
         public int ReserveId { get; set; }
         public int QuantityObserved { get; set; }
         public string HealthStatus { get; set; } = "Unknown";
+        [MaxLength(500)]
         public string? ObservationNotes { get; set; }
     }
 
@@ -161,8 +194,11 @@ namespace Bioma.Models
         public int LogId { get; set; }
         public int? RegionId { get; set; }
         public string? RegionName { get; set; }
+        [Required, MaxLength(100)]
         public string ThreatName { get; set; } = "";
+        [MaxLength(100)]
         public string? ThreatCategory { get; set; }
+        [Required]
         public string SeverityLevel { get; set; } = "";
         public DateTime AssessmentDate { get; set; }
         public int? AdminId { get; set; }
@@ -173,7 +209,9 @@ namespace Bioma.Models
     public class ThreatCreateDto
     {
         public int RegionId { get; set; }
+        [Required, MaxLength(100)]
         public string ThreatName { get; set; } = "";
+        [MaxLength(100)]
         public string? ThreatCategory { get; set; }
         public string SeverityLevel { get; set; } = "Medium";
         public DateTime AssessmentDate { get; set; }
@@ -186,8 +224,11 @@ namespace Bioma.Models
     public class TagDto
     {
         public int TagId { get; set; }
+        [Required, MaxLength(50)]
         public string TagName { get; set; } = "";
+        [MaxLength(50)]
         public string? TagCategory { get; set; }
+        [MaxLength(20)]
         public string? TagColor { get; set; }
     }
 

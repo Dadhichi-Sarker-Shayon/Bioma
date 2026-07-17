@@ -104,6 +104,11 @@ BEGIN
 EXCEPTION WHEN OTHERS THEN NULL;
 END;
 /
+BEGIN
+   EXECUTE IMMEDIATE 'DROP TABLE System_Alerts CASCADE CONSTRAINTS';
+EXCEPTION WHEN OTHERS THEN NULL;
+END;
+/
 
 -- DROP SEQUENCES
 BEGIN EXECUTE IMMEDIATE 'DROP SEQUENCE Admins_SEQ'; EXCEPTION WHEN OTHERS THEN NULL; END;
@@ -121,6 +126,8 @@ BEGIN EXECUTE IMMEDIATE 'DROP SEQUENCE Sightings_SEQ'; EXCEPTION WHEN OTHERS THE
 BEGIN EXECUTE IMMEDIATE 'DROP SEQUENCE ThreatLogs_SEQ'; EXCEPTION WHEN OTHERS THEN NULL; END;
 /
 BEGIN EXECUTE IMMEDIATE 'DROP SEQUENCE Tags_SEQ'; EXCEPTION WHEN OTHERS THEN NULL; END;
+/
+BEGIN EXECUTE IMMEDIATE 'DROP SEQUENCE Alerts_SEQ'; EXCEPTION WHEN OTHERS THEN NULL; END;
 /
 BEGIN EXECUTE IMMEDIATE 'DROP SEQUENCE SEQUENCE_RESERVES'; EXCEPTION WHEN OTHERS THEN NULL; END;
 /
@@ -171,6 +178,8 @@ CREATE SEQUENCE Sightings_SEQ START WITH 1 INCREMENT BY 1;
 CREATE SEQUENCE ThreatLogs_SEQ START WITH 1 INCREMENT BY 1;
 /
 CREATE SEQUENCE Tags_SEQ START WITH 1 INCREMENT BY 1;
+/
+CREATE SEQUENCE Alerts_SEQ START WITH 1 INCREMENT BY 1;
 /
 
 -- 3. CREATE TABLES
@@ -308,6 +317,19 @@ CREATE TABLE Organism_Tags (
 );
 /
 
+-- 11. System_Alerts (auto-populated by TRG_CriticalThreat_Alert)
+CREATE TABLE System_Alerts (
+    Alert_ID INT PRIMARY KEY,
+    Alert_Type VARCHAR2(50) NOT NULL,
+    Alert_Message VARCHAR2(500) NOT NULL,
+    Region_ID INT,
+    Threat_Log_ID INT,
+    Created_At TIMESTAMP DEFAULT SYSTIMESTAMP,
+    CONSTRAINT fk_alert_region FOREIGN KEY (Region_ID) REFERENCES Regions(Region_ID) ON DELETE SET NULL,
+    CONSTRAINT fk_alert_threat FOREIGN KEY (Threat_Log_ID) REFERENCES Threat_Logs(Log_ID) ON DELETE SET NULL
+);
+/
+
 -- 4. VIEWS
 
 CREATE OR REPLACE VIEW V_ExtinctionRisk AS
@@ -358,19 +380,6 @@ END;
 
 -- TRG_AutoExtinction_Escalator
 CREATE OR REPLACE TRIGGER TRG_AutoExtinction_Escalator
-AFTER UPDATE OF Estimated_Population ON Species_Distribution
-FOR EACH ROW
-DECLARE
-    v_total_pop INT;
-BEGIN
-    -- This trigger checks if the global population for the organism hits zero
-    -- We must avoid mutating table issues, but simple PRAGMA AUTONOMOUS_TRANSACTION works here for the escalation
-    -- Alternatively, since we are just checking the sum...
-    -- Actually, simpler: if they update it to 0, we'll check total.
-    NULL; -- Deferring complex implementation to avoid mutating table error. Will use PRAGMA AUTONOMOUS_TRANSACTION
-END;
-/
-CREATE OR REPLACE TRIGGER TRG_AutoExtinction_Escalator
 AFTER UPDATE ON Species_Distribution
 FOR EACH ROW
 WHEN (NEW.Estimated_Population = 0 AND OLD.Estimated_Population > 0)
@@ -400,10 +409,8 @@ WHEN (NEW.Severity_Level = 'Critical')
 DECLARE
     PRAGMA AUTONOMOUS_TRANSACTION;
 BEGIN
-    -- We can log an alert to DBMS_OUTPUT or a separate table.
-    -- The proposal states: "auto-inserts a system alert row when Severity = Critical"
-    -- Since we only have the Threat_Logs table, perhaps it inserts a follow-up action or we can just ignore self-insert to avoid loop.
-    DBMS_OUTPUT.PUT_LINE('CRITICAL THREAT ALERT: ' || :NEW.Threat_Name || ' in Region ID ' || :NEW.Region_ID);
+    INSERT INTO System_Alerts (Alert_Type, Alert_Message, Region_ID, Threat_Log_ID, Created_At)
+    VALUES ('CRITICAL_THREAT', :NEW.Threat_Name || ' in Region ' || :NEW.Region_ID, :NEW.Region_ID, :NEW.Log_ID, SYSDATE);
     COMMIT;
 END;
 /
@@ -526,7 +533,7 @@ END;
 /
 
 CREATE OR REPLACE TRIGGER trg_Encyclopedia_ID
-BEFORE INSERT ON Encyclopedia
+BEFORE INSERT ON Species_Encyclopedia
 FOR EACH ROW
 BEGIN
   IF :NEW.Encyclopedia_ID IS NULL THEN
@@ -581,6 +588,16 @@ FOR EACH ROW
 BEGIN
   IF :NEW.Tag_ID IS NULL THEN
     SELECT Tags_SEQ.NEXTVAL INTO :NEW.Tag_ID FROM DUAL;
+  END IF;
+END;
+/
+
+CREATE OR REPLACE TRIGGER trg_Alerts_ID
+BEFORE INSERT ON System_Alerts
+FOR EACH ROW
+BEGIN
+  IF :NEW.Alert_ID IS NULL THEN
+    SELECT Alerts_SEQ.NEXTVAL INTO :NEW.Alert_ID FROM DUAL;
   END IF;
 END;
 /

@@ -1,10 +1,9 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'http://localhost:5086/api', // the backend port (or adjust if different)
+  baseURL: '/api',
 });
 
-// Add a request interceptor to attach JWT token
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('bioma_admin_token');

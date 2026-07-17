@@ -1,3 +1,5 @@
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Bioma.Services;
 using System.Data;
@@ -8,6 +10,7 @@ namespace Bioma.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class SightingsController : ControllerBase
     {
         private readonly DatabaseService _db;
@@ -15,6 +18,13 @@ namespace Bioma.Controllers
         public SightingsController(DatabaseService db)
         {
             _db = db;
+        }
+
+        private int GetAdminId()
+        {
+            var sub = User.FindFirst(ClaimTypes.NameIdentifier)?.Value
+                      ?? User.FindFirst("sub")?.Value;
+            return int.TryParse(sub, out var id) ? id : 0;
         }
 
         [HttpGet("lookups")]
@@ -102,8 +112,9 @@ namespace Bioma.Controllers
         {
             try
             {
-                // In a real app we'd get Admin_ID from JWT token, for now we will assume the frontend sends it or we default to 1
-                int adminId = 1;
+                var adminId = GetAdminId();
+                if (adminId == 0)
+                    return Unauthorized(new { error = "Invalid or missing authentication token." });
 
                 var sql = @"INSERT INTO Sighting_Logs (Organism_ID, Reserve_ID, Admin_ID, Quantity_Observed, Health_Status, Observation_Notes)
                             VALUES (:orgId, :resId, :adminId, :qty, :health, :notes)";

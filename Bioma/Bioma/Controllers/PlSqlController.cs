@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Bioma.Services;
 
@@ -5,6 +6,7 @@ namespace Bioma.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class PlSqlController : ControllerBase
     {
         private readonly DatabaseService _db;
@@ -43,7 +45,7 @@ namespace Bioma.Controllers
         {
             try
             {
-                string output = _db.CallProcedureWithOutput("PRC_AllocateGrant", new Dictionary<string, object> { { "p_TotalAmount", dto.Amount } });
+                string output = _db.CallProcedureWithOutput("PRC_AllocateGrant", new Dictionary<string, object> { { "p_Amount", dto.Amount } });
                 return Ok(new { output });
             }
             catch (Exception ex)

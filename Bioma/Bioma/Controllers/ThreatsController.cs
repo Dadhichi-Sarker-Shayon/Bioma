@@ -1,3 +1,5 @@
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Bioma.Services;
 using System.Data;
@@ -7,6 +9,7 @@ namespace Bioma.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class ThreatsController : ControllerBase
     {
         private readonly DatabaseService _db;
@@ -14,6 +17,13 @@ namespace Bioma.Controllers
         public ThreatsController(DatabaseService db)
         {
             _db = db;
+        }
+
+        private int GetAdminId()
+        {
+            var sub = User.FindFirst(ClaimTypes.NameIdentifier)?.Value
+                      ?? User.FindFirst("sub")?.Value;
+            return int.TryParse(sub, out var id) ? id : 0;
         }
 
         [HttpGet("lookups")]
@@ -90,7 +100,9 @@ namespace Bioma.Controllers
         {
             try
             {
-                int adminId = 1; // Fallback dummy ID
+                var adminId = GetAdminId();
+                if (adminId == 0)
+                    return Unauthorized(new { error = "Invalid or missing authentication token." });
 
                 var sql = @"INSERT INTO Threat_Logs (Region_ID, Threat_Name, Threat_Category, Severity_Level, Assessment_Date, Admin_ID, Resolution_Status)
                             VALUES (:regId, :threatName, :category, :severity, :assessDate, :adminId, :status)";

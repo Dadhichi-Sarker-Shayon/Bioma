@@ -1,9 +1,12 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 using Bioma.Services;
 using Bioma.Models;
 using System.Data;
 using System.Security.Cryptography;
-using System.Text;
 
 namespace Bioma.Controllers
 {
@@ -12,16 +15,14 @@ namespace Bioma.Controllers
     public class AuthController : ControllerBase
     {
         private readonly DatabaseService _db;
+        private readonly IConfiguration _config;
 
-        public AuthController(DatabaseService db)
+        public AuthController(DatabaseService db, IConfiguration config)
         {
             _db = db;
+            _config = config;
         }
 
-        /// <summary>
-        /// GET /api/auth/users (Mapped to Admins in the new schema)
-        /// Lists all system admins.
-        /// </summary>
         [HttpGet("users")]
         public IActionResult GetAdmins()
         {
@@ -46,10 +47,6 @@ namespace Bioma.Controllers
             }
         }
 
-        /// <summary>
-        /// GET /api/auth/users/{id}
-        /// Gets a single admin by ID.
-        /// </summary>
         [HttpGet("users/{id}")]
         public IActionResult GetAdminById(int id)
         {
@@ -72,11 +69,6 @@ namespace Bioma.Controllers
             }
         }
 
-        /// <summary>
-        /// POST /api/auth/login
-        /// Validates credentials.
-        /// NOTE: For this simple implementation we just compare the hashes or plain text as seeded.
-        /// </summary>
         [HttpPost("login")]
         public IActionResult Login([FromBody] LoginDto dto)
         {
@@ -96,26 +88,17 @@ namespace Bioma.Controllers
 
                 var row = dt.Rows[0];
                 var storedHash = row["Password_Hash"]?.ToString() ?? "";
-                
-                // Using SHA256 hash comparison like the original app
-                var inputHash = HashPassword(dto.Password);
-                bool isMatch = storedHash == inputHash || storedHash == dto.Password;
 
-                // Fallback for the bad seed hash in setup.sql
-                if (dto.Username == "admin" && dto.Password == "admin123") 
-                {
-                    isMatch = true;
-                }
+                var inputHash = HashPassword(dto.Password);
+                bool isMatch = storedHash == inputHash;
 
                 if (!isMatch)
                     return Unauthorized(new { error = "Invalid username or password." });
 
                 var adminDto = MapAdminDto(row);
+                var token = GenerateJwtToken(adminDto);
 
-                return Ok(new {
-                    token = "dummy_jwt_token_for_bioma_admin_until_real_jwt_is_added",
-                    admin = adminDto
-                });
+                return Ok(new { token, admin = adminDto });
             }
             catch (Exception ex)
             {
@@ -123,10 +106,6 @@ namespace Bioma.Controllers
             }
         }
 
-        /// <summary>
-        /// POST /api/auth/users
-        /// Creates a new admin user.
-        /// </summary>
         [HttpPost("users")]
         public IActionResult CreateAdmin([FromBody] AdminCreateDto dto)
         {
@@ -158,10 +137,6 @@ namespace Bioma.Controllers
             }
         }
 
-        /// <summary>
-        /// PUT /api/auth/users/{id}
-        /// Updates an existing admin user.
-        /// </summary>
         [HttpPut("users/{id}")]
         public IActionResult UpdateAdmin(int id, [FromBody] AdminUpdateDto dto)
         {
@@ -210,16 +185,11 @@ namespace Bioma.Controllers
             }
         }
 
-        /// <summary>
-        /// DELETE /api/auth/users/{id}
-        /// Deletes an admin user.
-        /// </summary>
         [HttpDelete("users/{id}")]
         public IActionResult DeleteAdmin(int id)
         {
             try
             {
-                // Prevent deleting the last admin
                 var countDt = _db.Query("SELECT COUNT(*) as AdminCount FROM Admins");
                 int adminCount = Convert.ToInt32(countDt.Rows[0]["AdminCount"]);
                 if (adminCount <= 1)
@@ -227,9 +197,6 @@ namespace Bioma.Controllers
                     return BadRequest(new { error = "Cannot delete the last administrator." });
                 }
 
-                // Delete sightings/threats first? We will rely on DB constraints or cascade.
-                // Assuming we might just fail if there are constraints, or we should nullify them.
-                // For this implementation, let's just attempt delete. If it fails, return constraint error.
                 var dt = _db.Query("SELECT Admin_ID FROM Admins WHERE Admin_ID = :adminId",
                     new Dictionary<string, object> { { ":adminId", id } });
 
@@ -258,6 +225,33 @@ namespace Bioma.Controllers
             using var sha256 = SHA256.Create();
             var bytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
             return Convert.ToBase64String(bytes);
+        }
+
+        private string GenerateJwtToken(AdminDto admin)
+        {
+            var jwtSettings = _config.GetSection("Jwt");
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["Key"]!));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+            var claims = new[]
+            {
+                new Claim(JwtRegisteredClaimNames.Sub, admin.AdminId.ToString()),
+                new Claim(JwtRegisteredClaimNames.UniqueName, admin.Username),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim("fullName", admin.FullName ?? "")
+            };
+
+            var expiryMinutes = int.Parse(jwtSettings["ExpiryMinutes"] ?? "60");
+
+            var token = new JwtSecurityToken(
+                issuer: jwtSettings["Issuer"],
+                audience: jwtSettings["Audience"],
+                claims: claims,
+                expires: DateTime.UtcNow.AddMinutes(expiryMinutes),
+                signingCredentials: creds
+            );
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
         private static AdminDto MapAdminDto(DataRow row)
