@@ -85,7 +85,7 @@ namespace Bioma.Controllers
 
                 // Get recent sightings
                 var recentSql = @"
-                    SELECT s.Sighting_ID, s.Sighting_Timestamp, s.Quantity_Observed, s.Health_Status, s.Observation_Notes,
+                    SELECT s.Sighting_ID, s.Organism_ID, s.Sighting_Timestamp, s.Quantity_Observed, s.Health_Status, s.Observation_Notes,
                            o.Common_Name, o.Scientific_Name, o.Conservation_Status
                     FROM Sighting_Logs s
                     JOIN Organisms o ON s.Organism_ID = o.Organism_ID
@@ -98,6 +98,7 @@ namespace Bioma.Controllers
                     recentSightings.Add(new
                     {
                         sightingId = sr["Sighting_ID"],
+                        organismId = sr["Organism_ID"] == DBNull.Value ? (int?)null : Convert.ToInt32(sr["Organism_ID"]),
                         timestamp = sr["Sighting_Timestamp"],
                         quantity = sr["Quantity_Observed"],
                         healthStatus = sr["Health_Status"]?.ToString(),

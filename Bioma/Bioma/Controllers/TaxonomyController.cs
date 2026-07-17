@@ -52,14 +52,14 @@ namespace Bioma.Controllers
                 {
                     list.Add(new
                     {
-                        organismId = row["Organism_ID"],
+                        organismId = Convert.ToInt32(row["Organism_ID"]),
                         scientificName = row["Scientific_Name"]?.ToString(),
-                        commonName = row["Common_Name"]?.ToString(),
-                        discoveryYear = row["Discovery_Year"],
-                        parentId = row["Parent_ID"],
+                        commonName = row["Common_Name"] == DBNull.Value ? null : row["Common_Name"]?.ToString(),
+                        discoveryYear = row["Discovery_Year"] == DBNull.Value ? (int?)null : Convert.ToInt32(row["Discovery_Year"]),
+                        parentId = row["Parent_ID"] == DBNull.Value ? (int?)null : Convert.ToInt32(row["Parent_ID"]),
                         rankName = row["Rank_Name"]?.ToString(),
-                        kingdomType = row["Kingdom_Type"]?.ToString(),
-                        conservationStatus = row["Conservation_Status"]?.ToString()
+                        kingdomType = row["Kingdom_Type"] == DBNull.Value ? null : row["Kingdom_Type"]?.ToString(),
+                        conservationStatus = row["Conservation_Status"] == DBNull.Value ? null : row["Conservation_Status"]?.ToString()
                     });
                 }
                 return Ok(list);
