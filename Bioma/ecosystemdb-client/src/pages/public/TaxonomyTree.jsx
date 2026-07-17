@@ -10,69 +10,55 @@ const TaxonomyTreeNode = ({ node, level = 0 }) => {
 
   const getRankColor = (rank) => {
     switch (rank) {
-      case 'Kingdom': return '#f59e0b';
-      case 'Phylum': return '#10b981';
-      case 'Class': return '#3b82f6';
-      case 'Order': return '#8b5cf6';
-      case 'Family': return '#ec4899';
-      case 'Genus': return '#06b6d4';
-      case 'Species': return 'var(--accent-primary)';
-      default: return 'var(--text-secondary)';
+      case 'Kingdom': return '#f39c12';
+      case 'Phylum': return '#27ae60';
+      case 'Class': return '#2980b9';
+      case 'Order': return '#8e44ad';
+      case 'Family': return '#e74c3c';
+      case 'Genus': return '#16a085';
+      case 'Species': return '#1a3a5c';
+      default: return '#666';
     }
   };
 
   return (
-    <div style={{ marginLeft: level > 0 ? '20px' : '0' }}>
-      <div 
-        style={{ 
-          display: 'flex', 
-          alignItems: 'center', 
-          gap: '0.5rem', 
-          padding: '0.5rem', 
-          borderRadius: 'var(--radius-md)',
+    <div style={{ marginLeft: level > 0 ? '16px' : '0' }}>
+      <div
+        style={{
+          display: 'flex', alignItems: 'center', gap: '0.5rem',
+          padding: '0.375rem 0.5rem', borderRadius: '4px',
           cursor: hasChildren ? 'pointer' : 'default',
-          transition: 'var(--transition)',
-          background: 'rgba(255,255,255,0.02)',
-          marginBottom: '2px',
-          borderLeft: `3px solid ${getRankColor(node.rankName)}`
+          background: 'transparent', marginBottom: '1px',
+          borderLeft: `3px solid ${getRankColor(node.rankName)}`,
         }}
         onClick={() => hasChildren && setExpanded(!expanded)}
-        onMouseOver={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.05)'}
-        onMouseOut={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.02)'}
+        onMouseOver={(e) => e.currentTarget.style.background = '#f8f9fa'}
+        onMouseOut={(e) => e.currentTarget.style.background = 'transparent'}
       >
-        <div style={{ width: '20px', display: 'flex', justifyContent: 'center' }}>
+        <div style={{ width: '16px', display: 'flex', justifyContent: 'center' }}>
           {hasChildren ? (
-            expanded ? <ChevronDown size={16} color="var(--text-secondary)" /> : <ChevronRight size={16} color="var(--text-secondary)" />
-          ) : <div style={{ width: '16px' }} />}
+            expanded ? <ChevronDown size={14} color="#999" /> : <ChevronRight size={14} color="#999" />
+          ) : <div style={{ width: '14px' }} />}
         </div>
-        
-        <span style={{ fontSize: '0.75rem', fontWeight: 600, color: getRankColor(node.rankName), textTransform: 'uppercase', minWidth: '65px' }}>
+        <span style={{ fontSize: '0.7rem', fontWeight: 600, color: getRankColor(node.rankName), textTransform: 'uppercase', minWidth: '55px' }}>
           {node.rankName}
         </span>
-        
-        <span style={{ fontStyle: 'italic', color: 'var(--text-primary)', fontWeight: node.rankName === 'Kingdom' ? 600 : 400 }}>
+        <span style={{ fontStyle: 'italic', color: '#1a1a1a', fontWeight: node.rankName === 'Kingdom' ? 600 : 400, fontSize: '0.9rem' }}>
           {node.scientificName}
         </span>
-        
         {node.commonName && (
-          <span style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>
-            ({node.commonName})
-          </span>
+          <span style={{ color: '#999', fontSize: '0.85rem' }}>({node.commonName})</span>
         )}
-
         {node.rankName === 'Species' && (
-          <Link 
-            to={`/encyclopedia/${node.organismId}`} 
-            style={{ marginLeft: 'auto', fontSize: '0.75rem', color: 'var(--accent-primary)', textDecoration: 'none', padding: '0.2rem 0.5rem', border: '1px solid var(--accent-primary)', borderRadius: '1rem' }}
+          <Link
+            to={`/encyclopedia/${node.organismId}`}
+            style={{ marginLeft: 'auto', fontSize: '0.7rem', color: '#2980b9', textDecoration: 'none', padding: '0.15rem 0.5rem', border: '1px solid #2980b9', borderRadius: '3px', fontWeight: 500 }}
             onClick={(e) => e.stopPropagation()}
-          >
-            View Profile
-          </Link>
+          >View</Link>
         )}
       </div>
-
       {expanded && hasChildren && (
-        <div style={{ paddingLeft: '8px', borderLeft: '1px dashed var(--border-color)', marginLeft: '12px', marginTop: '4px', marginBottom: '8px' }}>
+        <div style={{ paddingLeft: '8px', borderLeft: '1px dashed #ddd', marginLeft: '10px', marginTop: '2px', marginBottom: '6px' }}>
           {node.children.map(child => (
             <TaxonomyTreeNode key={child.organismId} node={child} level={level + 1} />
           ))}
@@ -128,29 +114,21 @@ const TaxonomyTree = () => {
   };
 
   return (
-    <div style={{ maxWidth: '1000px', margin: '0 auto', padding: '0 2rem' }}>
-      <div className="page-header" style={{ marginBottom: '3rem' }}>
-        <div>
-          <h1 style={{ fontSize: '2.5rem', marginBottom: '0.5rem' }}>Taxonomy Tree</h1>
-          <p style={{ color: 'var(--text-secondary)' }}>Explore the hierarchical classification of all organisms in the Bioma database.</p>
-        </div>
-      </div>
+    <div style={{ maxWidth: '900px', margin: '0 auto', padding: '2rem' }}>
+      <h1 style={{ fontSize: '1.75rem', fontWeight: 700, marginBottom: '0.25rem' }}>Taxonomy Tree</h1>
+      <p style={{ color: '#777', marginBottom: '2rem' }}>Explore the hierarchical classification of all organisms.</p>
 
       {loading ? (
-        <div style={{ textAlign: 'center', padding: '4rem 0', color: 'var(--text-secondary)' }}>
-          Building taxonomy tree...
-        </div>
+        <div style={{ textAlign: 'center', padding: '4rem 0', color: '#999' }}>Loading...</div>
       ) : error ? (
         <div className="badge badge-danger">{error}</div>
       ) : (
-        <div className="glass-panel" style={{ padding: '2rem' }}>
+        <div className="card" style={{ padding: '1.5rem' }}>
           {treeData.map(rootNode => (
             <TaxonomyTreeNode key={rootNode.organismId} node={rootNode} />
           ))}
           {treeData.length === 0 && (
-            <div style={{ textAlign: 'center', color: 'var(--text-secondary)', padding: '2rem' }}>
-              No taxonomic data available.
-            </div>
+            <div style={{ textAlign: 'center', color: '#999', padding: '2rem' }}>No data available.</div>
           )}
         </div>
       )}

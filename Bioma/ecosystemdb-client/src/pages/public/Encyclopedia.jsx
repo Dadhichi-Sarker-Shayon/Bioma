@@ -56,161 +56,99 @@ const Encyclopedia = () => {
   };
 
   return (
-    <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 2rem' }}>
-      <div className="page-header" style={{ marginBottom: '3rem' }}>
-        <div>
-          <h1 style={{ fontSize: '2.5rem', marginBottom: '0.5rem' }}>Species Encyclopedia</h1>
-          <p style={{ color: 'var(--text-secondary)' }}>Browse the complete catalog of known organisms</p>
-        </div>
-      </div>
+    <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '2rem' }}>
+      <h1 style={{ fontSize: '1.75rem', fontWeight: 700, marginBottom: '0.25rem' }}>Species Encyclopedia</h1>
+      <p style={{ color: '#777', marginBottom: '2rem' }}>Browse the complete catalog of known organisms</p>
 
-      <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap' }}>
+      <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap' }}>
         {/* Sidebar Filters */}
-        <aside style={{ width: '280px', flexShrink: 0 }}>
-          <div className="glass-panel" style={{ padding: '1.5rem', position: 'sticky', top: '100px' }}>
+        <aside style={{ width: '240px', flexShrink: 0 }}>
+          <div className="card" style={{ padding: '1.25rem', position: 'sticky', top: '1rem' }}>
             <div className="form-group">
               <label className="form-label">Search</label>
-              <input 
-                type="text" 
-                className="form-input" 
-                placeholder="Common or Scientific Name..." 
-                value={search}
-                onChange={e => setSearch(e.target.value)}
-              />
+              <input type="text" className="form-input" placeholder="Name..." value={search} onChange={e => setSearch(e.target.value)} />
             </div>
-
-            <div className="form-group" style={{ marginTop: '1.5rem' }}>
-              <label className="form-label">Conservation Status</label>
+            <div className="form-group">
+              <label className="form-label">Status</label>
               <select className="form-select" value={selectedStatus} onChange={e => setSelectedStatus(e.target.value)}>
-                <option value="">All Statuses</option>
+                <option value="">All</option>
                 {filters.Statuses?.map(s => (
                   <option key={s.statusCode} value={s.statusCode}>{s.statusName}</option>
                 ))}
               </select>
             </div>
-
-            <div className="form-group" style={{ marginTop: '1.5rem' }}>
+            <div className="form-group">
               <label className="form-label">Diet</label>
               <select className="form-select" value={selectedDiet} onChange={e => setSelectedDiet(e.target.value)}>
-                <option value="">All Diets</option>
+                <option value="">All</option>
                 {filters.Diets?.map(d => (
                   <option key={d} value={d}>{d}</option>
                 ))}
               </select>
             </div>
-
-            <div className="form-group" style={{ marginTop: '1.5rem' }}>
-              <label className="form-label">Characteristics (Tags)</label>
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+            <div className="form-group">
+              <label className="form-label">Tags</label>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.375rem' }}>
                 {filters.Tags?.map(tag => {
                   const isSelected = selectedTags.includes(tag.tagName);
                   return (
-                    <button
-                      key={tag.tagName}
-                      onClick={() => toggleTag(tag.tagName)}
-                      style={{
-                        padding: '0.25rem 0.75rem',
-                        borderRadius: '1rem',
-                        fontSize: '0.75rem',
-                        border: `1px solid ${isSelected ? tag.tagColor : 'var(--border-color)'}`,
-                        background: isSelected ? `${tag.tagColor}33` : 'transparent',
-                        color: isSelected ? tag.tagColor : 'var(--text-secondary)',
-                        cursor: 'pointer',
-                        transition: 'var(--transition)'
-                      }}
-                    >
-                      {tag.tagName}
-                    </button>
+                    <button key={tag.tagName} onClick={() => toggleTag(tag.tagName)} style={{
+                      padding: '0.2rem 0.6rem', borderRadius: '4px', fontSize: '0.7rem', fontWeight: 500,
+                      border: `1px solid ${isSelected ? tag.tagColor : '#ddd'}`,
+                      background: isSelected ? `${tag.tagColor}15` : '#f8f9fa',
+                      color: isSelected ? tag.tagColor : '#666',
+                      cursor: 'pointer',
+                    }}>{tag.tagName}</button>
                   );
                 })}
               </div>
             </div>
-            
-            <button 
-              className="btn btn-secondary" 
-              style={{ width: '100%', marginTop: '1.5rem' }}
-              onClick={() => {
-                setSearch('');
-                setSelectedStatus('');
-                setSelectedDiet('');
-                setSelectedTags([]);
-              }}
-            >
+            <button className="btn btn-secondary" style={{ width: '100%', marginTop: '0.75rem' }} onClick={() => { setSearch(''); setSelectedStatus(''); setSelectedDiet(''); setSelectedTags([]); }}>
               Clear Filters
             </button>
           </div>
         </aside>
 
-        {/* Results Grid */}
+        {/* Results */}
         <div style={{ flex: 1, minWidth: '0' }}>
           {loading ? (
-            <div style={{ textAlign: 'center', padding: '4rem 0', color: 'var(--text-secondary)' }}>
-              Loading species data...
-            </div>
+            <div style={{ textAlign: 'center', padding: '4rem 0', color: '#999' }}>Loading...</div>
           ) : species.length === 0 ? (
-            <div className="glass-panel" style={{ padding: '4rem 2rem', textAlign: 'center' }}>
-              <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>🔍</div>
+            <div className="card" style={{ padding: '4rem 2rem', textAlign: 'center' }}>
               <h3 style={{ marginBottom: '0.5rem' }}>No species found</h3>
-              <p style={{ color: 'var(--text-secondary)' }}>Try adjusting your search or filters to find what you're looking for.</p>
+              <p style={{ color: '#999' }}>Try adjusting your search or filters.</p>
             </div>
           ) : (
-            <div className="grid-3" style={{ gap: '1.5rem' }}>
+            <div className="grid-3" style={{ gap: '1rem' }}>
               {species.map(s => (
                 <Link key={s.organismId} to={`/encyclopedia/${s.organismId}`} style={{ textDecoration: 'none' }}>
-                  <div className="card" style={{ height: '100%', display: 'flex', flexDirection: 'column', padding: 0, overflow: 'hidden' }}>
-                    <div style={{ 
-                      height: '160px', 
-                      background: s.imageUrl ? `url(${s.imageUrl}) center/cover` : 'var(--bg-tertiary)',
-                      display: 'flex',
-                      alignItems: 'flex-start',
-                      justifyContent: 'flex-end',
-                      padding: '1rem'
-                    }}>
-                      {s.statusCode && (
-                        <span className="badge badge-warning" style={{ background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(4px)', color: '#fff', border: '1px solid rgba(255,255,255,0.2)' }}>
-                          {s.statusCode}
-                        </span>
-                      )}
-                    </div>
-                    
-                    <div style={{ padding: '1.5rem', flex: 1, display: 'flex', flexDirection: 'column' }}>
-                      <div style={{ color: 'var(--accent-primary)', fontSize: '0.75rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.25rem' }}>
+                  <div className="card" style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.5rem' }}>
+                      <span style={{ fontSize: '0.7rem', fontWeight: 600, color: '#2980b9', textTransform: 'uppercase' }}>
                         {s.kingdomType || 'Organism'}
-                      </div>
-                      <h3 style={{ fontSize: '1.25rem', color: 'var(--text-primary)', marginBottom: '0.25rem' }}>
-                        {s.commonName || s.scientificName}
-                      </h3>
-                      {s.commonName && (
-                        <div style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', fontStyle: 'italic', marginBottom: '1rem' }}>
-                          {s.scientificName}
-                        </div>
-                      )}
-                      
-                      <p style={{ color: 'var(--text-tertiary)', fontSize: '0.875rem', marginBottom: '1.5rem', flex: 1, display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
-                        {s.description || 'No description available for this species.'}
-                      </p>
-                      
-                      {s.tags && s.tags.length > 0 && (
-                        <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginTop: 'auto' }}>
-                          {s.tags.slice(0, 3).map((tag, i) => (
-                            <span key={i} style={{ 
-                              fontSize: '0.7rem', 
-                              padding: '0.15rem 0.5rem', 
-                              borderRadius: '1rem', 
-                              border: `1px solid ${tag.tagColor}40`,
-                              color: tag.tagColor
-                            }}>
-                              {tag.tagName}
-                            </span>
-                          ))}
-                          {s.tags.length > 3 && (
-                            <span style={{ fontSize: '0.7rem', color: 'var(--text-tertiary)', alignSelf: 'center' }}>
-                              +{s.tags.length - 3}
-                            </span>
-                          )}
-                        </div>
-                      )}
+                      </span>
+                      {s.statusCode && <span className="badge badge-neutral">{s.statusCode}</span>}
                     </div>
+                    <h3 style={{ fontSize: '1rem', fontWeight: 700, color: '#1a1a1a', marginBottom: '0.25rem' }}>
+                      {s.commonName || s.scientificName}
+                    </h3>
+                    {s.commonName && (
+                      <div style={{ fontSize: '0.8rem', color: '#999', fontStyle: 'italic', marginBottom: '0.75rem' }}>
+                        {s.scientificName}
+                      </div>
+                    )}
+                    <p style={{ color: '#666', fontSize: '0.8rem', lineHeight: 1.5, flex: 1, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+                      {s.description || 'No description available.'}
+                    </p>
+                    {s.tags && s.tags.length > 0 && (
+                      <div style={{ display: 'flex', gap: '0.375rem', flexWrap: 'wrap', marginTop: '0.75rem' }}>
+                        {s.tags.slice(0, 3).map((tag, i) => (
+                          <span key={i} style={{ fontSize: '0.65rem', padding: '0.15rem 0.4rem', borderRadius: '3px', background: `${tag.tagColor}15`, color: tag.tagColor, fontWeight: 500 }}>
+                            {tag.tagName}
+                          </span>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 </Link>
               ))}
