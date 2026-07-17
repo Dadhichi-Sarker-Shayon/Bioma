@@ -125,37 +125,31 @@ const FEATURES = [
     icon: '📖',
     title: 'Species Encyclopedia',
     description: 'Browse detailed profiles of hundreds of species with physiological data, habitat behaviors, and photo galleries.',
-    gradient: 'linear-gradient(135deg, #065f46, #047857)',
   },
   {
     icon: '🌳',
     title: 'Tree of Life Explorer',
     description: 'Navigate the recursive taxonomic hierarchy from Kingdom to Species with an interactive expandable tree.',
-    gradient: 'linear-gradient(135deg, #064e3b, #065f46)',
   },
   {
     icon: '🗺️',
     title: 'Distribution Maps',
     description: 'Explore species distribution across biomes and geographical regions with population trends and survey data.',
-    gradient: 'linear-gradient(135deg, #0c4a6e, #0369a1)',
   },
   {
     icon: '📊',
     title: 'Conservation Dashboard',
     description: 'View extinction risk leaderboards, reserve health analytics, and ecosystem stability metrics in real-time.',
-    gradient: 'linear-gradient(135deg, #581c87, #6b21a8)',
   },
   {
     icon: '🔍',
     title: 'Tag-Based Search',
     description: 'Find species using multi-tag AND-logic: combine traits like "Nocturnal" + "Apex Predator" + "Endangered".',
-    gradient: 'linear-gradient(135deg, #78350f, #92400e)',
   },
   {
     icon: '🔬',
     title: 'Food Web Network',
     description: 'Visualize ecological interactions — predation, mutualism, competition, parasitism — with impact scale analysis.',
-    gradient: 'linear-gradient(135deg, #7f1d1d, #991b1b)',
   },
 ]
 
@@ -271,7 +265,7 @@ export default function LandingPage({ onEnterAdmin, onExplore, onSelectView }) {
                 if (feature.title === 'Species Encyclopedia') onSelectView?.('encyclopedia');
               }}
             >
-              <div className="feature-card-icon" style={{ background: feature.gradient }}>
+              <div className="feature-card-icon">
                 {feature.icon}
               </div>
               <h3 className="feature-card-title">{feature.title}</h3>

@@ -19,16 +19,29 @@
 .lesko-hero {
   position: relative;
   min-height: 100vh;
-  background-color: #022b1e;
-  background-image: 
-    radial-gradient(ellipse at 70% 30%, rgba(13, 84, 61, 0.6) 0%, transparent 60%),
-    radial-gradient(ellipse at 30% 80%, rgba(5, 59, 41, 0.8) 0%, transparent 60%);
+  background-color: #0a0f0a;
+  background-image: url('/images/hero_tiger.png');
+  background-size: cover;
+  background-position: center;
   display: flex;
   flex-direction: column;
   padding: 0;
   overflow: hidden;
   font-family: 'Inter', system-ui, sans-serif;
   color: white;
+}
+
+.lesko-hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(10, 15, 10, 0.5) 0%, rgba(10, 15, 10, 0.85) 100%);
+  z-index: 1;
+}
+
+.lesko-hero > * {
+  position: relative;
+  z-index: 2;
 }
 
 /* NAVBAR */
@@ -315,10 +328,7 @@
 }
 
 .title-accent {
-  background: linear-gradient(135deg, var(--emerald-300), var(--emerald-500));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--emerald-400);
 }
 
 .section-subtitle {
@@ -370,7 +380,7 @@
   left: -50%;
   width: 200%;
   height: 200%;
-  background: radial-gradient(circle at center, rgba(52, 211, 153, 0.03), transparent 60%);
+  background: rgba(52, 211, 153, 0.02);
   opacity: 0;
   transition: opacity var(--transition-slow);
   pointer-events: none;
@@ -389,7 +399,8 @@
   justify-content: center;
   font-size: 24px;
   margin-bottom: 20px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+  background: rgba(52, 211, 153, 0.1);
+  border: 1px solid rgba(52, 211, 153, 0.15);
 }
 
 .feature-card-title {
@@ -546,7 +557,7 @@
   width: 600px;
   height: 600px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(16, 185, 129, 0.06), transparent 70%);
+  background: rgba(16, 185, 129, 0.04);
   pointer-events: none;
 }
 
@@ -582,12 +593,12 @@
   box-shadow: var(--shadow-glow);
 }
 
-.stat-card-emerald::before { background: linear-gradient(90deg, var(--emerald-500), var(--emerald-300)); }
-.stat-card-sky::before { background: linear-gradient(90deg, var(--sky-500), var(--sky-400)); }
-.stat-card-amber::before { background: linear-gradient(90deg, var(--amber-500), var(--amber-400)); }
-.stat-card-rose::before { background: linear-gradient(90deg, var(--rose-500), var(--rose-400)); }
-.stat-card-violet::before { background: linear-gradient(90deg, var(--violet-500), var(--violet-400)); }
-.stat-card-teal::before { background: linear-gradient(90deg, #14b8a6, #2dd4bf); }
+.stat-card-emerald::before { background: var(--emerald-400); }
+.stat-card-sky::before { background: var(--sky-400); }
+.stat-card-amber::before { background: var(--amber-400); }
+.stat-card-rose::before { background: var(--rose-400); }
+.stat-card-violet::before { background: var(--violet-400); }
+.stat-card-teal::before { background: #2dd4bf; }
 
 .stat-card-icon {
   font-size: 2rem;
@@ -648,10 +659,7 @@
   font-size: 3rem;
   font-weight: 800;
   letter-spacing: -0.04em;
-  background: linear-gradient(135deg, var(--emerald-300), var(--emerald-500));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--emerald-400);
   line-height: 1;
   margin-bottom: 8px;
 }
@@ -682,8 +690,7 @@
 .cta-bg-pattern {
   position: absolute;
   inset: 0;
-  background:
-    radial-gradient(ellipse 60% 50% at 50% 50%, rgba(16, 185, 129, 0.05), transparent);
+  background: rgba(52, 211, 153, 0.03);
   pointer-events: none;
 }
 
