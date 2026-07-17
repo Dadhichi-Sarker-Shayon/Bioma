@@ -33,6 +33,7 @@ const Home = () => {
         padding: '4rem 2rem',
       }}>
         <div style={{ maxWidth: '900px', margin: '0 auto' }}>
+          <img src="/logo.svg" alt="Bioma" style={{ width: '120px', marginBottom: '1.5rem' }} />
           <div style={{
             fontSize: '0.7rem',
             fontWeight: 700,

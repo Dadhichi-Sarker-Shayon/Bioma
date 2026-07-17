@@ -1,0 +1,96 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 420" fill="none">
+  <!-- Open Book -->
+  <path d="M200 340 L80 310 L80 180 L200 200 Z" fill="#1a6b5a" opacity="0.9"/>
+  <path d="M200 340 L320 310 L320 180 L200 200 Z" fill="#1a6b5a" opacity="0.8"/>
+  <path d="M80 180 L200 200 L200 340 L80 310 Z" stroke="#1a5c50" stroke-width="2" fill="none"/>
+  <path d="M320 180 L200 200 L200 340 L320 310 Z" stroke="#1a5c50" stroke-width="2" fill="none"/>
+  
+  <!-- Book spine -->
+  <path d="M200 200 L200 340" stroke="#1a5c50" stroke-width="3"/>
+  
+  <!-- Book pages left -->
+  <path d="M90 185 L195 203 L195 335 L90 305 Z" fill="#f5f0e8" stroke="#d4c9b8" stroke-width="0.5"/>
+  <path d="M95 190 L195 207 L195 330 L95 300 Z" fill="#faf7f2" stroke="#e8ddd0" stroke-width="0.5"/>
+  
+  <!-- Book pages right -->
+  <path d="M310 185 L205 203 L205 335 L310 305 Z" fill="#f5f0e8" stroke="#d4c9b8" stroke-width="0.5"/>
+  <path d="M305 190 L205 207 L205 330 L305 300 Z" fill="#faf7f2" stroke="#e8ddd0" stroke-width="0.5"/>
+  
+  <!-- Tree trunk -->
+  <path d="M195 280 C190 260 175 230 170 200 C168 190 175 185 180 195 C185 210 195 250 195 280Z" fill="#1a6b5a"/>
+  <path d="M205 280 C210 260 225 230 230 200 C232 190 225 185 220 195 C215 210 205 250 205 280Z" fill="#1a6b5a"/>
+  
+  <!-- Tree main branches -->
+  <path d="M185 230 C170 210 140 180 130 150" stroke="#1a6b5a" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <path d="M190 210 C180 190 160 160 155 130" stroke="#1a6b5a" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+  <path d="M195 195 C195 170 195 140 195 110" stroke="#1a6b5a" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <path d="M215 210 C225 185 250 160 260 135" stroke="#1a6b5a" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+  <path d="M210 230 C230 210 260 190 275 165" stroke="#1a6b5a" stroke-width="3" fill="none" stroke-linecap="round"/>
+  
+  <!-- Leaves - teal/green -->
+  <ellipse cx="130" cy="148" rx="12" ry="8" fill="#1a6b5a" transform="rotate(-30 130 148)"/>
+  <ellipse cx="120" cy="138" rx="10" ry="7" fill="#1a6b5a" transform="rotate(-45 120 138)"/>
+  <ellipse cx="140" cy="135" rx="11" ry="7" fill="#1a6b5a" transform="rotate(-15 140 135)"/>
+  <ellipse cx="155" cy="128" rx="12" ry="8" fill="#1a6b5a" transform="rotate(-20 155 128)"/>
+  <ellipse cx="145" cy="118" rx="10" ry="7" fill="#1a6b5a" transform="rotate(-40 145 118)"/>
+  <ellipse cx="160" cy="115" rx="11" ry="7" fill="#1a6b5a" transform="rotate(-10 160 115)"/>
+  
+  <!-- Leaves - copper/brown -->
+  <ellipse cx="170" cy="108" rx="10" ry="7" fill="#c4883a" transform="rotate(-25 170 108)"/>
+  <ellipse cx="185" cy="100" rx="11" ry="7" fill="#c4883a" transform="rotate(5 185 100)"/>
+  <ellipse cx="195" cy="95" rx="10" ry="8" fill="#c4883a" transform="rotate(0 195 95)"/>
+  <ellipse cx="210" cy="100" rx="11" ry="7" fill="#c4883a" transform="rotate(-5 210 100)"/>
+  <ellipse cx="225" cy="108" rx="10" ry="7" fill="#c4883a" transform="rotate(25 225 108)"/>
+  
+  <!-- More teal leaves -->
+  <ellipse cx="240" cy="120" rx="11" ry="7" fill="#1a6b5a" transform="rotate(30 240 120)"/>
+  <ellipse cx="250" cy="132" rx="12" ry="8" fill="#1a6b5a" transform="rotate(40 250 132)"/>
+  <ellipse cx="260" cy="145" rx="10" ry="7" fill="#1a6b5a" transform="rotate(50 260 145)"/>
+  <ellipse cx="268" cy="160" rx="11" ry="7" fill="#1a6b5a" transform="rotate(35 268 160)"/>
+  <ellipse cx="275" cy="172" rx="10" ry="7" fill="#1a6b5a" transform="rotate(45 275 172)"/>
+  
+  <!-- Top center leaves -->
+  <ellipse cx="190" cy="88" rx="10" ry="7" fill="#1a6b5a" transform="rotate(-15 190 88)"/>
+  <ellipse cx="200" cy="82" rx="9" ry="7" fill="#1a6b5a" transform="rotate(0 200 82)"/>
+  <ellipse cx="210" cy="88" rx="10" ry="7" transform="rotate(15 210 88)" fill="#c4883a"/>
+  
+  <!-- Small accent leaves -->
+  <ellipse cx="135" cy="155" rx="8" ry="5" fill="#c4883a" transform="rotate(-50 135 155)"/>
+  <ellipse cx="150" cy="140" rx="8" ry="5" fill="#c4883a" transform="rotate(-35 150 140)"/>
+  <ellipse cx="245" cy="138" rx="8" ry="5" fill="#c4883a" transform="rotate(45 245 138)"/>
+  <ellipse cx="262" cy="155" rx="8" ry="5" fill="#c4883a" transform="rotate(55 262 155)"/>
+  
+  <!-- Fox head (right side) -->
+  <!-- Fox face -->
+  <path d="M250 200 C255 185 265 170 275 160 C280 155 290 155 290 165 C290 175 280 195 270 210 C265 218 255 225 250 225 Z" fill="#c4883a"/>
+  
+  <!-- Fox ear left -->
+  <path d="M265 170 L258 145 L275 162 Z" fill="#c4883a"/>
+  <path d="M267 168 L262 150 L273 163 Z" fill="#e8a85c"/>
+  
+  <!-- Fox ear right -->
+  <path d="M285 162 L288 138 L298 158 Z" fill="#c4883a"/>
+  <path d="M287 160 L290 143 L296 157 Z" fill="#e8a85c"/>
+  
+  <!-- Fox snout -->
+  <path d="M275 180 C280 178 295 175 300 180 C305 185 300 195 290 195 C285 195 278 190 275 185 Z" fill="#f0d5b0"/>
+  
+  <!-- Fox nose -->
+  <path d="M295 182 C297 180 300 181 300 184 C300 187 297 188 295 186 Z" fill="#2a2a2a"/>
+  
+  <!-- Fox eye -->
+  <ellipse cx="275" cy="175" rx="3" ry="3.5" fill="#2a2a2a"/>
+  <ellipse cx="276" cy="174" rx="1" ry="1" fill="#ffffff"/>
+  
+  <!-- Fox cheek/chest -->
+  <path d="M260 210 C265 218 270 228 275 235 C270 230 260 225 255 215 Z" fill="#f0d5b0"/>
+  
+  <!-- Fox body outline on book -->
+  <path d="M245 230 C250 240 260 250 270 255 C265 248 255 238 248 228 Z" fill="#c4883a" opacity="0.6"/>
+  
+  <!-- BIOMA text -->
+  <text x="200" y="375" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="52" font-weight="bold" fill="#1a4a42" letter-spacing="6">BIOMA</text>
+  
+  <!-- Subtitle -->
+  <text x="200" y="400" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#1a4a42" letter-spacing="3" font-weight="500">ANIMAL &amp; PLANT ENCYCLOPEDIA</text>
+</svg>

@@ -1,5 +1,5 @@
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
-import { LayoutDashboard, Leaf, Map, Tags, LogOut, Shield, Users } from 'lucide-react';
+import { LayoutDashboard, Leaf, Map, Tags, LogOut, Users } from 'lucide-react';
 
 const AdminLayout = () => {
   const navigate = useNavigate();
@@ -43,8 +43,8 @@ const AdminLayout = () => {
         {/* Sidebar */}
         <nav className="sidebar">
           <div className="sidebar-logo">
-            <Shield size={18} />
-            <span>Bioma</span>
+            <img src="/logo-icon.svg" alt="Bioma" style={{ width: '24px', height: '24px' }} />
+            <span>BIOMA</span>
           </div>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.125rem' }}>

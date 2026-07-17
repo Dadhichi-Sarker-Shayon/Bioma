@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <!-- Open Book -->
+  <path d="M50 85 L20 78 L20 42 L50 48 Z" fill="#1a6b5a" opacity="0.9"/>
+  <path d="M50 85 L80 78 L80 42 L50 48 Z" fill="#1a6b5a" opacity="0.8"/>
+  <path d="M25 45 L48 50 L48 82 L25 76 Z" fill="#faf7f2"/>
+  <path d="M75 45 L52 50 L52 82 L75 76 Z" fill="#faf7f2"/>
+  <path d="M50 48 L50 85" stroke="#1a5c50" stroke-width="1.5"/>
+  
+  <!-- Tree trunk -->
+  <path d="M48 72 C46 62 42 55 40 48 C39 44 42 42 44 46 C46 52 48 62 48 72Z" fill="#1a6b5a"/>
+  <path d="M52 72 C54 62 58 55 60 48 C61 44 58 42 56 46 C54 52 52 62 52 72Z" fill="#1a6b5a"/>
+  
+  <!-- Branches -->
+  <path d="M45 58 C40 52 32 45 28 38" stroke="#1a6b5a" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <path d="M46 52 C43 46 38 40 35 32" stroke="#1a6b5a" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+  <path d="M48 48 C48 42 48 35 48 28" stroke="#1a6b5a" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+  <path d="M55 52 C58 44 65 38 70 32" stroke="#1a6b5a" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+  <path d="M54 58 C60 52 68 48 74 42" stroke="#1a6b5a" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+  
+  <!-- Leaves teal -->
+  <ellipse cx="28" cy="37" rx="5" ry="3.5" fill="#1a6b5a" transform="rotate(-30 28 37)"/>
+  <ellipse cx="35" cy="31" rx="5" ry="3.5" fill="#1a6b5a" transform="rotate(-20 35 31)"/>
+  <ellipse cx="48" cy="27" rx="4.5" ry="3.5" fill="#1a6b5a" transform="rotate(0 48 27)"/>
+  <ellipse cx="63" cy="31" rx="5" ry="3.5" fill="#1a6b5a" transform="rotate(20 63 31)"/>
+  <ellipse cx="70" cy="38" rx="5" ry="3.5" fill="#1a6b5a" transform="rotate(35 70 38)"/>
+  
+  <!-- Leaves copper -->
+  <ellipse cx="42" cy="24" rx="4.5" ry="3" fill="#c4883a" transform="rotate(-10 42 24)"/>
+  <ellipse cx="55" cy="24" rx="4.5" ry="3" fill="#c4883a" transform="rotate(10 55 24)"/>
+  <ellipse cx="32" cy="42" rx="4" ry="2.5" fill="#c4883a" transform="rotate(-40 32 42)"/>
+  <ellipse cx="68" cy="44" rx="4" ry="2.5" fill="#c4883a" transform="rotate(40 68 44)"/>
+  
+  <!-- Fox head -->
+  <path d="M62 50 C64 44 68 40 72 37 C74 35 78 36 78 40 C78 44 74 52 70 58 C68 62 64 64 62 64 Z" fill="#c4883a"/>
+  <path d="M68 40 L66 32 L72 38 Z" fill="#c4883a"/>
+  <path d="M76 38 L78 30 L82 36 Z" fill="#c4883a"/>
+  <path d="M72 46 C74 45 79 44 81 46 C83 48 81 52 77 52 C75 52 73 49 72 47 Z" fill="#f0d5b0"/>
+  <ellipse cx="71" cy="43" rx="1.5" ry="1.8" fill="#2a2a2a"/>
+  <circle cx="71.5" cy="42.5" r="0.5" fill="#fff"/>
+  <path d="M80 46 C81 45.5 82 46 82 47.5 C82 49 81 49 80 48 Z" fill="#2a2a2a"/>
+</svg>

@@ -186,7 +186,7 @@ export default function LandingPage({ onEnterAdmin, onExplore, onSelectView }) {
       <section className="lesko-hero">
         <div className="lesko-nav">
           <div className="lesko-brand">
-            <span className="lesko-logo-icon">🌿</span>
+            <img src="/logo-icon.svg" alt="Bioma" style={{ width: '36px', height: '36px' }} />
             <span className="lesko-logo-text">BIOMA</span>
           </div>
           <div className="lesko-nav-right">
@@ -440,7 +440,7 @@ export default function LandingPage({ onEnterAdmin, onExplore, onSelectView }) {
       <footer className="landing-footer" id="landing-footer">
         <div className="footer-inner">
           <div className="footer-brand">
-            <div className="landing-brand-icon">🌿</div>
+            <img src="/logo-icon.svg" alt="Bioma" style={{ width: '40px', height: '40px' }} />
             <div>
               <h3>Bioma</h3>
               <p>Biogeographical Taxonomy & Conservation Ecosystem Database</p>

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Shield, AlertCircle } from 'lucide-react';
+import { AlertCircle } from 'lucide-react';
 import api from '../api';
 
 const Login = () => {
@@ -46,17 +46,9 @@ const Login = () => {
         padding: '2.5rem 2rem',
       }}>
         <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
-          <div style={{
-            display: 'inline-flex',
-            background: '#eaf2f8',
-            padding: '0.75rem',
-            borderRadius: '50%',
-            marginBottom: '1rem',
-          }}>
-            <Shield size={28} color="#1a3a5c" />
-          </div>
+          <img src="/logo.svg" alt="Bioma Logo" style={{ width: '100px', marginBottom: '1rem' }} />
           <h1 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#1a1a1a' }}>
-            Bioma Admin
+            Admin Portal
           </h1>
           <p style={{ color: '#777', fontSize: '0.85rem', marginTop: '0.25rem' }}>
             Sign in to the conservation portal

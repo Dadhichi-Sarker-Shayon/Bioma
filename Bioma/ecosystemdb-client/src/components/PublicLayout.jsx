@@ -15,8 +15,9 @@ const PublicLayout = () => {
     <div className="public-container">
       {/* Header */}
       <header className="public-header">
-        <Link to="/" className="public-header-logo">
-          Bioma
+        <Link to="/" className="public-header-logo" style={{ display: 'flex', alignItems: 'center', gap: '0.625rem' }}>
+          <img src="/logo-icon.svg" alt="Bioma" style={{ height: '32px', width: '32px' }} />
+          <span>BIOMA</span>
         </Link>
         <nav className="public-nav">
           {navLinks.map((link) => (
