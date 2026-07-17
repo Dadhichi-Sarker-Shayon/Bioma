@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../../api';
 
@@ -30,7 +30,7 @@ const TAG_CATEGORIES = {
 
 const Encyclopedia = () => {
   const [species, setSpecies] = useState([]);
-  const [filters, setFilters] = useState({ Diets: [], Statuses: [], Tags: [] });
+  const [filters, setFilters] = useState({ diets: [], statuses: [], tags: [] });
   const [loading, setLoading] = useState(true);
   const [searchInput, setSearchInput] = useState('');
   const [search, setSearch] = useState('');
@@ -93,7 +93,7 @@ const Encyclopedia = () => {
 
   // Group tags by category
   const tagsByCategory = {};
-  filters.Tags?.forEach(tag => {
+  filters.tags?.forEach(tag => {
     if (!tagsByCategory[tag.tagCategory]) tagsByCategory[tag.tagCategory] = [];
     tagsByCategory[tag.tagCategory].push(tag);
   });
@@ -141,13 +141,13 @@ const Encyclopedia = () => {
             <select value={selectedStatus} onChange={e => setSelectedStatus(e.target.value)}
               style={{ padding: '0.75rem 1rem', borderRadius: '6px', border: '2px solid #dde1e6', fontSize: '0.9rem', background: 'white', minWidth: '140px' }}>
               <option value="">All Status</option>
-              {filters.Statuses?.map(s => <option key={s.statusCode} value={s.statusCode}>{s.statusName}</option>)}
+              {filters.statuses?.map(s => <option key={s.statusCode} value={s.statusCode}>{s.statusName}</option>)}
             </select>
 
             <select value={selectedDiet} onChange={e => setSelectedDiet(e.target.value)}
               style={{ padding: '0.75rem 1rem', borderRadius: '6px', border: '2px solid #dde1e6', fontSize: '0.9rem', background: 'white', minWidth: '130px' }}>
               <option value="">All Diets</option>
-              {filters.Diets?.map(d => <option key={d} value={d}>{d}</option>)}
+              {filters.diets?.map(d => <option key={d} value={d}>{d}</option>)}
             </select>
           </div>
 
@@ -156,7 +156,7 @@ const Encyclopedia = () => {
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginTop: '0.75rem', alignItems: 'center' }}>
               <span style={{ fontSize: '0.75rem', color: '#888', fontWeight: 600 }}>Active:</span>
               {search && (
-                <FilterPill label={`"${search}`} onRemove={() => removeFilter('search')} />
+                <FilterPill label={`"${search}"`} onRemove={() => removeFilter('search')} />
               )}
               {selectedKingdom && (
                 <FilterPill label={selectedKingdom} onRemove={() => removeFilter('kingdom')} />

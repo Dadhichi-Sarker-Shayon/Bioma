@@ -15,6 +15,8 @@ import SpeciesDetail from './pages/public/SpeciesDetail';
 import PublicReserves from './pages/public/PublicReserves';
 import PublicSightings from './pages/public/PublicSightings';
 import TaxonomyTree from './pages/public/TaxonomyTree';
+import RegionDetail from './pages/public/RegionDetail';
+import ReserveDetail from './pages/public/ReserveDetail';
 
 // Simple Auth Guard
 const RequireAuth = ({ children }) => {
@@ -36,6 +38,8 @@ function App() {
           <Route path="encyclopedia/:id" element={<SpeciesDetail />} />
           <Route path="tree" element={<TaxonomyTree />} />
           <Route path="reserves" element={<PublicReserves />} />
+          <Route path="reserves/:id" element={<ReserveDetail />} />
+          <Route path="regions/:id" element={<RegionDetail />} />
           <Route path="sightings" element={<PublicSightings />} />
         </Route>
 
