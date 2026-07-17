@@ -75,6 +75,32 @@ namespace Bioma.Controllers
             }
         }
 
+        [HttpPost("assign-tags")]
+        public IActionResult AssignTags()
+        {
+            try
+            {
+                string scriptPath = Path.Combine(_env.ContentRootPath, "assign_tags.sql");
+                if (!System.IO.File.Exists(scriptPath))
+                    return NotFound(new { error = "assign_tags.sql not found" });
+
+                string sql = System.IO.File.ReadAllText(scriptPath);
+                _db.ExecuteLargeScript(sql);
+
+                var dt = _db.Query("SELECT COUNT(*) as cnt FROM Organism_Tags");
+                int total = Convert.ToInt32(dt.Rows[0]["cnt"]);
+
+                var dt2 = _db.Query("SELECT COUNT(DISTINCT Organism_ID) as cnt FROM Organism_Tags");
+                int speciesWithTags = Convert.ToInt32(dt2.Rows[0]["cnt"]);
+
+                return Ok(new { message = "Tags assigned", totalAssignments = total, speciesWithTags });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { error = ex.Message });
+            }
+        }
+
         [HttpPost("update-images")]
         public IActionResult UpdateImages()
         {
