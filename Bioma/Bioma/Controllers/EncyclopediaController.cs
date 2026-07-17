@@ -16,7 +16,7 @@ namespace Bioma.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetSpecies([FromQuery] string? search, [FromQuery] string? status, [FromQuery] string? diet, [FromQuery] string? tags)
+        public IActionResult GetSpecies([FromQuery] string? search, [FromQuery] string? status, [FromQuery] string? diet, [FromQuery] string? tags, [FromQuery] string? kingdom)
         {
             try
             {
@@ -46,6 +46,12 @@ namespace Bioma.Controllers
                 {
                     sql += " AND se.Diet_Type = :diet";
                     parms.Add(":diet", diet.Trim());
+                }
+
+                if (!string.IsNullOrWhiteSpace(kingdom))
+                {
+                    sql += " AND o.Kingdom_Type = :kingdom";
+                    parms.Add(":kingdom", kingdom.Trim());
                 }
 
                 if (!string.IsNullOrWhiteSpace(tags))
