@@ -607,7 +607,7 @@ END;
 -- Admin seed (admin / admin123)
 -- Hash generated using SHA256 (base64) matching C# backend
 INSERT INTO Admins (Username, Password_Hash, Full_Name, Email) 
-VALUES ('admin', 'jGl25bVBBBW96Qi9Te4V37Fnqchz/Eu4qB9vKrRIqRg=', 'System Administrator', 'admin@bioma.org');
+VALUES ('admin', 'JAvlGPq9JyTdtvBO6x2llnRI1+gxwIyPqCKAn3THIKk=', 'System Administrator', 'admin@bioma.org');
 /
 
 -- Some basic taxonomy data to get started
