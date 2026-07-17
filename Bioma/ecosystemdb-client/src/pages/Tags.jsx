@@ -52,43 +52,43 @@ const Tags = () => {
   };
 
   return (
-    <div className="animate-fade-in">
+    <div>
       <div className="page-header">
         <div>
-          <h2>Global Tags</h2>
-          <p style={{ color: 'var(--text-secondary)' }}>Manage categorization tags for species.</p>
+          <h2 className="page-title">Tags</h2>
+          <p className="page-subtitle">Manage categorization tags for species.</p>
         </div>
         <button className="btn btn-primary" onClick={() => setShowModal(true)}>
-          <Plus size={18} /> Create Tag
+          <Plus size={16} /> Create Tag
         </button>
       </div>
 
       <div className="card">
         {loading ? (
-          <p style={{ textAlign: 'center', color: 'var(--text-secondary)' }}>Loading tags...</p>
+          <p style={{ textAlign: 'center', color: '#999' }}>Loading tags...</p>
         ) : (
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem' }}>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem' }}>
             {tags.map((tag) => (
-              <div key={tag.tagId} className="glass-panel" style={{ padding: '0.75rem 1.25rem', display: 'flex', alignItems: 'center', gap: '1rem', minWidth: '150px' }}>
-                <div style={{ width: '12px', height: '12px', borderRadius: '50%', backgroundColor: tag.tagColor || 'var(--accent-primary)' }}></div>
+              <div key={tag.tagId} style={{ padding: '0.625rem 1rem', display: 'flex', alignItems: 'center', gap: '0.75rem', minWidth: '140px', background: '#f8f9fa', border: '1px solid #e8e8e8', borderRadius: '6px' }}>
+                <div style={{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: tag.tagColor || '#2980b9' }}></div>
                 <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
-                  <span style={{ fontWeight: 500, color: 'var(--text-primary)' }}>{tag.tagName}</span>
-                  <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>{tag.tagCategory}</span>
+                  <span style={{ fontWeight: 600, fontSize: '0.875rem' }}>{tag.tagName}</span>
+                  <span style={{ fontSize: '0.7rem', color: '#999' }}>{tag.tagCategory}</span>
                 </div>
-                <button className="btn" style={{ padding: '0.25rem', color: 'var(--danger)', background: 'transparent' }} onClick={() => handleDelete(tag.tagId)}>
-                  <Trash2 size={16} />
+                <button className="btn" style={{ padding: '0.25rem', color: '#e74c3c', background: 'transparent', border: 'none' }} onClick={() => handleDelete(tag.tagId)}>
+                  <Trash2 size={14} />
                 </button>
               </div>
             ))}
-            {tags.length === 0 && <p style={{ color: 'var(--text-secondary)' }}>No tags found in the system.</p>}
+            {tags.length === 0 && <p style={{ color: '#999' }}>No tags found.</p>}
           </div>
         )}
       </div>
 
       {showModal && (
         <div className="modal-overlay">
-          <div className="card modal-content animate-fade-in" style={{ maxWidth: '400px' }}>
-            <h3 style={{ marginBottom: '1.5rem' }}>Create New Tag</h3>
+          <div className="modal-content" style={{ maxWidth: '400px', padding: '1.5rem' }}>
+            <h3 style={{ marginBottom: '1.25rem', fontSize: '1.1rem' }}>Create New Tag</h3>
             <form onSubmit={handleSubmit}>
               <div className="form-group">
                 <label className="form-label">Tag Name *</label>
@@ -101,7 +101,7 @@ const Tags = () => {
               <div className="form-group">
                 <label className="form-label">Color Hex</label>
                 <div style={{ display: 'flex', gap: '1rem' }}>
-                  <input type="color" style={{ width: '50px', height: '40px', padding: 0, border: 'none', background: 'none' }} value={formData.tagColor} onChange={e => setFormData({...formData, tagColor: e.target.value})} />
+                  <input type="color" style={{ width: '40px', height: '36px', padding: 0, border: '1px solid #ddd', borderRadius: '4px', cursor: 'pointer' }} value={formData.tagColor} onChange={e => setFormData({...formData, tagColor: e.target.value})} />
                   <input type="text" className="form-input" value={formData.tagColor} onChange={e => setFormData({...formData, tagColor: e.target.value})} />
                 </div>
               </div>

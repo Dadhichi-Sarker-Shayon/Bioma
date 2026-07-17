@@ -132,11 +132,11 @@ const Reserves = () => {
   };
 
   return (
-    <div className="animate-fade-in">
+    <div>
       <div className="page-header">
         <div>
-          <h2>Reserves & Threat Monitor</h2>
-          <p style={{ color: 'var(--text-secondary)' }}>Manage physical reserves and track ecological threats.</p>
+          <h2 className="page-title">Reserves & Threats</h2>
+          <p className="page-subtitle">Manage reserves and track ecological threats.</p>
         </div>
         <div style={{ display: 'flex', gap: '1rem' }}>
           <button className={`btn ${activeTab === 'reserves' ? 'btn-primary' : 'btn-secondary'}`} onClick={() => setActiveTab('reserves')}>
@@ -149,9 +149,9 @@ const Reserves = () => {
       </div>
 
       {activeTab === 'reserves' && (
-        <div className="card animate-fade-in">
-          <div className="page-header" style={{ marginBottom: '1rem' }}>
-            <h3 style={{ fontSize: '1.25rem' }}>Managed Reserves</h3>
+        <div className="card">
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+            <h3 style={{ fontSize: '1rem', fontWeight: 700 }}>Managed Reserves</h3>
             <button className="btn btn-primary" onClick={() => { setEditingReserveId(null); setReserveForm({ reserveName: '', regionId: '', totalAreaSqKm: '', annualBudgetUsd: '', establishedYear: '', reserveType: 'National Park' }); setShowReserveModal(true); }}>
               <Plus size={18} /> Add Reserve
             </button>
@@ -176,7 +176,7 @@ const Reserves = () => {
                     <td>{r.regionName}</td>
                     <td><span className="badge badge-neutral">{r.reserveType}</span></td>
                     <td>{r.totalAreaSqKm}</td>
-                    <td style={{ color: 'var(--success)' }}>{r.annualBudgetUsd ? `$${r.annualBudgetUsd}` : '-'}</td>
+                    <td style={{ color: '#27ae60' }}>{r.annualBudgetUsd ? `$${r.annualBudgetUsd}` : '-'}</td>
                     <td>{r.establishedYear}</td>
                     <td style={{ textAlign: 'right' }}>
                       <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'flex-end' }}>
@@ -193,9 +193,9 @@ const Reserves = () => {
       )}
 
       {activeTab === 'threats' && (
-        <div className="card animate-fade-in">
-          <div className="page-header" style={{ marginBottom: '1rem' }}>
-            <h3 style={{ fontSize: '1.25rem' }}>Active Threat Reports</h3>
+        <div className="card">
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+            <h3 style={{ fontSize: '1rem', fontWeight: 700 }}>Active Threats</h3>
             <button className="btn btn-danger" onClick={() => setShowThreatModal(true)}>
               <ShieldAlert size={18} /> Report Threat
             </button>
@@ -247,8 +247,8 @@ const Reserves = () => {
       {/* Modals */}
       {showReserveModal && (
         <div className="modal-overlay">
-          <div className="card modal-content animate-fade-in">
-            <h3 style={{ marginBottom: '1.5rem' }}>{editingReserveId ? 'Edit Reserve' : 'Add Reserve'}</h3>
+          <div className="modal-content" style={{ padding: '1.5rem' }}>
+            <h3 style={{ marginBottom: '1.25rem', fontSize: '1.1rem' }}>{editingReserveId ? 'Edit Reserve' : 'Add Reserve'}</h3>
             <form onSubmit={handleReserveSubmit}>
               <div className="form-group">
                 <label className="form-label">Reserve Name *</label>
@@ -294,8 +294,8 @@ const Reserves = () => {
 
       {showThreatModal && (
         <div className="modal-overlay">
-          <div className="card modal-content animate-fade-in" style={{ maxWidth: '500px' }}>
-            <h3 style={{ marginBottom: '1.5rem' }}>Report New Threat</h3>
+          <div className="modal-content" style={{ maxWidth: '500px', padding: '1.5rem' }}>
+            <h3 style={{ marginBottom: '1.25rem', fontSize: '1.1rem' }}>Report New Threat</h3>
             <form onSubmit={handleThreatSubmit}>
               <div className="form-group">
                 <label className="form-label">Region *</label>

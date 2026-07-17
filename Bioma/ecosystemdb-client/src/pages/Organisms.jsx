@@ -204,14 +204,14 @@ const Organisms = () => {
   };
 
   return (
-    <div className="animate-fade-in">
+    <div>
       <div className="page-header">
         <div>
-          <h2>Organism Management</h2>
-          <p style={{ color: 'var(--text-secondary)' }}>Manage taxonomic tree, profiles, distributions and record sightings.</p>
+          <h2 className="page-title">Organisms</h2>
+          <p className="page-subtitle">Manage taxonomic tree, profiles, distributions and sightings.</p>
         </div>
         <button className="btn btn-primary" onClick={() => { setEditingId(null); setFormData({ scientificName: '', commonName: '', rankName: 'Species', parentId: '', kingdomType: 'Animal', conservationStatus: 'LC', discoveryYear: '' }); setShowModal(true); }}>
-          <Plus size={18} /> Add Organism
+          <Plus size={16} /> Add Organism
         </button>
       </div>
 
@@ -232,12 +232,12 @@ const Organisms = () => {
               {loading ? <tr><td colSpan="6">Loading...</td></tr> : organisms.map(org => (
                 <tr key={org.organismId}>
                   <td><span className="badge badge-neutral">{org.rankName}</span></td>
-                  <td style={{ fontStyle: 'italic', color: 'var(--accent-primary)' }}>{org.scientificName}</td>
+                  <td style={{ fontStyle: 'italic', color: '#2980b9' }}>{org.scientificName}</td>
                   <td style={{ fontWeight: 500 }}>{org.commonName || '-'}</td>
                   <td>{org.kingdomType || '-'}</td>
                   <td>{getStatusBadge(org.conservationStatus)}</td>
                   <td style={{ textAlign: 'right' }}>
-                    <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'flex-end' }}>
+                    <div style={{ display: 'flex', gap: '0.375rem', justifyContent: 'flex-end' }}>
                       <button className="btn btn-secondary" style={{ padding: '0.25rem 0.5rem' }} onClick={() => handleManageTags(org)} title="Manage Tags"><Tags size={14} /></button>
                       
                       {org.rankName === 'Species' && (
@@ -259,11 +259,10 @@ const Organisms = () => {
         </div>
       </div>
 
-      {/* --- Taxonomy Modal --- */}
       {showModal && (
         <div className="modal-overlay">
-          <div className="card modal-content animate-fade-in">
-            <h3 style={{ marginBottom: '1.5rem' }}>{editingId ? 'Edit Taxonomy' : 'Add Organism'}</h3>
+          <div className="modal-content" style={{ padding: '1.5rem' }}>
+            <h3 style={{ marginBottom: '1.25rem', fontSize: '1.1rem' }}>{editingId ? 'Edit Taxonomy' : 'Add Organism'}</h3>
             <form onSubmit={handleSubmit}>
               <div className="grid-2">
                 <div className="form-group"><label className="form-label">Scientific Name *</label><input type="text" className="form-input" value={formData.scientificName} onChange={e => setFormData({...formData, scientificName: e.target.value})} required /></div>
@@ -301,11 +300,10 @@ const Organisms = () => {
         </div>
       )}
 
-      {/* --- Encyclopedia Editor Modal --- */}
       {showEncycModal && (
         <div className="modal-overlay">
-          <div className="card modal-content animate-fade-in" style={{ maxWidth: '800px' }}>
-            <h3 style={{ marginBottom: '1.5rem' }}>Edit Encyclopedia: <i>{encycOrg?.scientificName}</i></h3>
+          <div className="modal-content" style={{ maxWidth: '800px', padding: '1.5rem' }}>
+            <h3 style={{ marginBottom: '1.25rem', fontSize: '1.1rem' }}>Edit Encyclopedia: <i>{encycOrg?.scientificName}</i></h3>
             <form onSubmit={saveEncyclopedia}>
               <div className="grid-2">
                 <div className="form-group" style={{ gridColumn: 'span 2' }}>
@@ -364,11 +362,10 @@ const Organisms = () => {
         </div>
       )}
 
-      {/* --- Distributions Modal --- */}
       {showDistModal && (
         <div className="modal-overlay">
-          <div className="card modal-content animate-fade-in" style={{ maxWidth: '800px' }}>
-            <h3 style={{ marginBottom: '1.5rem' }}>Distributions: <i>{distOrg?.scientificName}</i></h3>
+          <div className="modal-content" style={{ maxWidth: '800px', padding: '1.5rem' }}>
+            <h3 style={{ marginBottom: '1.25rem', fontSize: '1.1rem' }}>Distributions: <i>{distOrg?.scientificName}</i></h3>
             
             <div className="table-container" style={{ marginBottom: '2rem' }}>
               <table className="table">
@@ -387,7 +384,7 @@ const Organisms = () => {
                       </td>
                     </tr>
                   ))}
-                  {distributions.length === 0 && <tr><td colSpan="5" style={{ textAlign: 'center', color: 'var(--text-secondary)' }}>No distributions added.</td></tr>}
+                  {distributions.length === 0 && <tr><td colSpan="5" style={{ textAlign: 'center', color: '#999' }}>No distributions added.</td></tr>}
                 </tbody>
               </table>
             </div>
@@ -426,14 +423,13 @@ const Organisms = () => {
         </div>
       )}
 
-      {/* --- Tag Modal --- */}
       {showTagModal && (
         <div className="modal-overlay">
-          <div className="card modal-content animate-fade-in" style={{ maxWidth: '400px' }}>
-            <h3 style={{ marginBottom: '1.5rem' }}>Tags for <i>{taggingOrg?.scientificName}</i></h3>
-            <div style={{ maxHeight: '300px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+          <div className="modal-content" style={{ maxWidth: '400px', padding: '1.5rem' }}>
+            <h3 style={{ marginBottom: '1.25rem', fontSize: '1.1rem' }}>Tags for <i>{taggingOrg?.scientificName}</i></h3>
+            <div style={{ maxHeight: '300px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '0.375rem' }}>
               {allTags.map(t => (
-                <label key={t.tagId} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.5rem', background: 'var(--bg-primary)', borderRadius: 'var(--radius-sm)', cursor: 'pointer' }}>
+                <label key={t.tagId} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.5rem', background: '#f8f9fa', borderRadius: '4px', cursor: 'pointer' }}>
                   <input type="checkbox" checked={selectedTagIds.includes(t.tagId)} onChange={() => toggleTag(t.tagId)} />
                   <div style={{ width: '12px', height: '12px', borderRadius: '50%', backgroundColor: t.tagColor }}></div>
                   <span>{t.tagName}</span>
@@ -448,11 +444,10 @@ const Organisms = () => {
         </div>
       )}
 
-      {/* --- Sighting Modal --- */}
       {showSightingModal && (
         <div className="modal-overlay">
-          <div className="card modal-content animate-fade-in" style={{ maxWidth: '500px' }}>
-            <h3 style={{ marginBottom: '1.5rem' }}>Log Sighting</h3>
+          <div className="modal-content" style={{ maxWidth: '500px', padding: '1.5rem' }}>
+            <h3 style={{ marginBottom: '1.25rem', fontSize: '1.1rem' }}>Log Sighting</h3>
             <form onSubmit={submitSighting}>
               <div className="form-group">
                 <label className="form-label">Reserve *</label>

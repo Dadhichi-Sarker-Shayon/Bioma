@@ -111,17 +111,17 @@ const Users = () => {
     }
   };
 
-  if (loading && users.length === 0) return <div className="animate-fade-in" style={{ padding: '2rem' }}>Loading users...</div>;
+  if (loading && users.length === 0) return <div style={{ padding: '2rem', color: '#999' }}>Loading users...</div>;
 
   return (
-    <div className="animate-fade-in" style={{ paddingBottom: '2rem' }}>
-      <div className="page-header" style={{ marginBottom: '2rem' }}>
+    <div style={{ paddingBottom: '2rem' }}>
+      <div className="page-header">
         <div>
-          <h2>System Users</h2>
-          <p style={{ color: 'var(--text-secondary)' }}>Manage administrator accounts and permissions.</p>
+          <h2 className="page-title">Users</h2>
+          <p className="page-subtitle">Manage administrator accounts.</p>
         </div>
         <button className="btn btn-primary" onClick={openAddModal}>
-          <Plus size={18} /> Add User
+          <Plus size={16} /> Add User
         </button>
       </div>
 
@@ -132,43 +132,41 @@ const Users = () => {
           <table className="table">
             <thead>
               <tr>
-                <th>Admin ID</th>
+                <th>ID</th>
                 <th>Username</th>
                 <th>Full Name</th>
                 <th>Email</th>
-                <th>Created At</th>
+                <th>Created</th>
                 <th style={{ textAlign: 'right' }}>Actions</th>
               </tr>
             </thead>
             <tbody>
               {users.map(u => (
                 <tr key={u.adminId}>
-                  <td style={{ color: 'var(--text-secondary)' }}>#{u.adminId}</td>
+                  <td style={{ color: '#999' }}>#{u.adminId}</td>
                   <td>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                      <Shield size={16} color="var(--accent-primary)" />
-                      <strong style={{ color: 'var(--text-primary)' }}>@{u.username}</strong>
+                      <Shield size={14} color="#1a3a5c" />
+                      <strong>@{u.username}</strong>
                     </div>
                   </td>
-                  <td>{u.fullName || <span style={{ color: 'var(--text-secondary)', fontStyle: 'italic' }}>Not provided</span>}</td>
-                  <td>{u.email || <span style={{ color: 'var(--text-secondary)', fontStyle: 'italic' }}>Not provided</span>}</td>
-                  <td>{u.createdAt ? new Date(u.createdAt).toLocaleDateString() : 'N/A'}</td>
-                  <td>
-                    <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'flex-end' }}>
-                      <button className="btn btn-secondary" style={{ padding: '0.4rem' }} onClick={() => openEditModal(u)} title="Edit User">
-                        <Edit2 size={16} />
+                  <td>{u.fullName || <span style={{ color: '#999', fontStyle: 'italic' }}>—</span>}</td>
+                  <td>{u.email || <span style={{ color: '#999', fontStyle: 'italic' }}>—</span>}</td>
+                  <td>{u.createdAt ? new Date(u.createdAt).toLocaleDateString() : '—'}</td>
+                  <td style={{ textAlign: 'right' }}>
+                    <div style={{ display: 'flex', gap: '0.375rem', justifyContent: 'flex-end' }}>
+                      <button className="btn btn-secondary" style={{ padding: '0.25rem 0.5rem' }} onClick={() => openEditModal(u)} title="Edit">
+                        <Edit2 size={14} />
                       </button>
-                      <button className="btn btn-secondary" style={{ padding: '0.4rem', color: 'var(--danger)', borderColor: 'var(--danger-border)' }} onClick={() => handleDelete(u.adminId, u.username)} title="Delete User">
-                        <Trash2 size={16} />
+                      <button className="btn btn-danger" style={{ padding: '0.25rem 0.5rem' }} onClick={() => handleDelete(u.adminId, u.username)} title="Delete">
+                        <Trash2 size={14} />
                       </button>
                     </div>
                   </td>
                 </tr>
               ))}
               {users.length === 0 && !loading && (
-                <tr>
-                  <td colSpan="6" style={{ textAlign: 'center', color: 'var(--text-secondary)', padding: '2rem' }}>No users found.</td>
-                </tr>
+                <tr><td colSpan="6" style={{ textAlign: 'center', color: '#999', padding: '2rem' }}>No users found.</td></tr>
               )}
             </tbody>
           </table>
@@ -176,18 +174,17 @@ const Users = () => {
       </div>
 
       {showModal && (
-        <div className="modal-overlay animate-fade-in" onClick={closeModal} style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(4px)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 }}>
-          <div className="card" style={{ width: '100%', maxWidth: '500px', margin: '1rem' }} onClick={e => e.stopPropagation()}>
-            <h3 style={{ marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <Shield size={20} color="var(--accent-primary)" />
+        <div className="modal-overlay" onClick={closeModal}>
+          <div className="modal-content" style={{ padding: '1.5rem' }} onClick={e => e.stopPropagation()}>
+            <h3 style={{ marginBottom: '1.25rem', fontSize: '1.1rem' }}>
               {editingUser ? 'Edit User' : 'Create New User'}
             </h3>
-            
-            {formError && <div className="badge badge-danger" style={{ marginBottom: '1.5rem', display: 'block' }}>{formError}</div>}
+
+            {formError && <div className="badge badge-danger" style={{ marginBottom: '1rem', display: 'block' }}>{formError}</div>}
             
             <form onSubmit={handleSubmit}>
               <div style={{ marginBottom: '1rem' }}>
-                <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.875rem', color: 'var(--text-secondary)' }}>Username {editingUser && '(Cannot be changed)'}</label>
+                <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.875rem', color: '#666' }}>Username {editingUser && '(Cannot be changed)'}</label>
                 <input 
                   type="text" 
                   className="form-input" 
@@ -200,7 +197,7 @@ const Users = () => {
               </div>
 
               <div style={{ marginBottom: '1rem' }}>
-                <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.875rem', color: 'var(--text-secondary)' }}>Password {editingUser && '(Leave blank to keep unchanged)'}</label>
+                <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.875rem', color: '#666' }}>Password {editingUser && '(Leave blank to keep unchanged)'}</label>
                 <input 
                   type="password" 
                   className="form-input" 
@@ -212,7 +209,7 @@ const Users = () => {
               </div>
 
               <div style={{ marginBottom: '1rem' }}>
-                <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.875rem', color: 'var(--text-secondary)' }}>Full Name</label>
+                <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.875rem', color: '#666' }}>Full Name</label>
                 <input 
                   type="text" 
                   className="form-input" 
@@ -223,7 +220,7 @@ const Users = () => {
               </div>
 
               <div style={{ marginBottom: '1.5rem' }}>
-                <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.875rem', color: 'var(--text-secondary)' }}>Email</label>
+                <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.875rem', color: '#666' }}>Email</label>
                 <input 
                   type="email" 
                   className="form-input" 
