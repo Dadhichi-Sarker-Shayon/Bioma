@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ChevronRight, ChevronDown } from 'lucide-react';
+import api from '../../api';
 
 const TaxonomyTreeNode = ({ node, level = 0 }) => {
-  const [expanded, setExpanded] = useState(level < 1); // Expand Kingdoms by default
+  const [expanded, setExpanded] = useState(level < 1);
 
   const hasChildren = node.children && node.children.length > 0;
 
@@ -89,15 +90,11 @@ const TaxonomyTree = () => {
   useEffect(() => {
     const fetchTree = async () => {
       try {
-        const res = await fetch('http://localhost:5086/api/taxonomy/tree');
-        if (res.ok) {
-          const flatData = await res.json();
-          setTreeData(buildTree(flatData));
-        } else {
-          setError('Failed to fetch taxonomy data.');
-        }
+        const res = await api.get('/taxonomy/tree');
+        const flatData = res.data;
+        setTreeData(buildTree(flatData));
       } catch (err) {
-        setError('Network error occurred.');
+        setError('Failed to fetch taxonomy data.');
       } finally {
         setLoading(false);
       }
@@ -105,17 +102,14 @@ const TaxonomyTree = () => {
     fetchTree();
   }, []);
 
-  // Build recursive tree from flat list based on parentId
   const buildTree = (data) => {
     const map = new Map();
     const roots = [];
 
-    // Initialize nodes
     data.forEach(item => {
       map.set(item.organismId, { ...item, children: [] });
     });
 
-    // Link parents to children
     data.forEach(item => {
       const node = map.get(item.organismId);
       if (item.parentId) {
@@ -123,7 +117,7 @@ const TaxonomyTree = () => {
         if (parent) {
           parent.children.push(node);
         } else {
-          roots.push(node); // Fallback if parent missing
+          roots.push(node);
         }
       } else {
         roots.push(node);

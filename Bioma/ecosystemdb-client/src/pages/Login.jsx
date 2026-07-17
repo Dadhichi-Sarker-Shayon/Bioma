@@ -30,20 +30,64 @@ const Login = () => {
   };
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', alignItems: 'center', justifyContent: 'center', background: 'var(--bg-primary)' }}>
-      <div className="glass-panel animate-fade-in" style={{ width: '100%', maxWidth: '420px', padding: '2.5rem', position: 'relative', zIndex: 10 }}>
-        
+    <div style={{
+      display: 'flex',
+      minHeight: '100vh',
+      alignItems: 'center',
+      justifyContent: 'center',
+      position: 'relative',
+      overflow: 'hidden'
+    }}>
+      {/* Background Image */}
+      <div style={{
+        position: 'absolute',
+        inset: 0,
+        backgroundImage: 'url(/images/featured_snow_leopard.png)',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        filter: 'brightness(0.2)',
+        zIndex: 0
+      }} />
+
+      {/* Login Card */}
+      <div className="glass-panel animate-fade-in" style={{
+        width: '100%',
+        maxWidth: '400px',
+        padding: '2.5rem',
+        position: 'relative',
+        zIndex: 10
+      }}>
         <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
-          <div style={{ display: 'inline-flex', background: 'rgba(0, 240, 255, 0.1)', padding: '1rem', borderRadius: '50%', marginBottom: '1rem' }}>
-            <Shield size={40} className="text-gradient" color="var(--accent-primary)" />
+          <div style={{
+            display: 'inline-flex',
+            background: 'rgba(0, 240, 255, 0.08)',
+            padding: '0.875rem',
+            borderRadius: '50%',
+            marginBottom: '1rem',
+            border: '1px solid rgba(0, 240, 255, 0.12)'
+          }}>
+            <Shield size={32} color="var(--accent-primary)" />
           </div>
-          <h1 style={{ fontSize: '1.75rem', marginBottom: '0.5rem' }}>Bioma <span className="text-gradient">Admin</span></h1>
-          <p style={{ color: 'var(--text-secondary)' }}>Sign in to access the conservation portal.</p>
+          <h1 style={{ fontSize: '1.5rem', marginBottom: '0.375rem', fontWeight: 700 }}>
+            Bioma <span style={{ color: 'var(--accent-primary)' }}>Admin</span>
+          </h1>
+          <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem' }}>Sign in to access the conservation portal.</p>
         </div>
 
         {error && (
-          <div style={{ background: 'rgba(255, 75, 75, 0.1)', border: '1px solid var(--danger)', color: 'var(--danger)', padding: '0.75rem', borderRadius: 'var(--radius-md)', marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.875rem' }}>
-            <AlertCircle size={16} />
+          <div style={{
+            background: 'rgba(255, 75, 75, 0.1)',
+            border: '1px solid var(--danger)',
+            color: 'var(--danger)',
+            padding: '0.75rem',
+            borderRadius: 'var(--radius-md)',
+            marginBottom: '1.5rem',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.5rem',
+            fontSize: '0.8rem'
+          }}>
+            <AlertCircle size={14} />
             {error}
           </div>
         )}
@@ -60,7 +104,7 @@ const Login = () => {
               required
             />
           </div>
-          <div className="form-group" style={{ marginBottom: '2rem' }}>
+          <div className="form-group" style={{ marginBottom: '1.75rem' }}>
             <label className="form-label">Password</label>
             <input 
               type="password" 
@@ -71,19 +115,24 @@ const Login = () => {
               required
             />
           </div>
-          <button type="submit" className="btn btn-primary" style={{ width: '100%', padding: '0.75rem' }} disabled={loading}>
-            {loading ? 'Authenticating...' : 'Sign In Securely'}
+          <button type="submit" className="btn btn-primary" style={{ width: '100%', padding: '0.75rem', fontSize: '0.9rem' }} disabled={loading}>
+            {loading ? 'Authenticating...' : 'Sign In'}
           </button>
         </form>
 
-        <div style={{ textAlign: 'center', marginTop: '2rem', fontSize: '0.75rem', color: 'var(--text-tertiary)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.25rem' }}>
-          <Leaf size={12} /> Bioma Wildlife Conservation System
+        <div style={{
+          textAlign: 'center',
+          marginTop: '1.5rem',
+          fontSize: '0.7rem',
+          color: 'var(--text-tertiary)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: '0.25rem'
+        }}>
+          <Leaf size={11} /> Bioma Wildlife Conservation System
         </div>
       </div>
-      
-      {/* Decorative background elements */}
-      <div style={{ position: 'absolute', top: '-10%', left: '-10%', width: '50%', height: '50%', background: 'radial-gradient(circle, rgba(0, 112, 243, 0.15) 0%, transparent 60%)', filter: 'blur(60px)', zIndex: 0 }}></div>
-      <div style={{ position: 'absolute', bottom: '-10%', right: '-10%', width: '50%', height: '50%', background: 'radial-gradient(circle, rgba(0, 240, 255, 0.1) 0%, transparent 60%)', filter: 'blur(60px)', zIndex: 0 }}></div>
     </div>
   );
 };

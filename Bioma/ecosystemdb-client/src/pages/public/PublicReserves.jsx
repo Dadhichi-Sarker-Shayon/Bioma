@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import api from '../../api';
 
 const PublicReserves = () => {
   const [reserves, setReserves] = useState([]);
@@ -11,11 +12,8 @@ const PublicReserves = () => {
 
   const fetchReserves = async () => {
     try {
-      const res = await fetch('http://localhost:5086/api/reserves');
-      if (res.ok) {
-        const data = await res.json();
-        setReserves(data);
-      }
+      const res = await api.get('/reserves');
+      setReserves(res.data);
     } catch (error) {
       console.error("Failed to fetch reserves", error);
     } finally {
@@ -61,11 +59,6 @@ const PublicReserves = () => {
         <div className="grid-3" style={{ gap: '2rem' }}>
           {filteredReserves.map(reserve => (
             <div key={reserve.reserveId} className="card" style={{ display: 'flex', flexDirection: 'column', position: 'relative', overflow: 'hidden' }}>
-              <div style={{ 
-                position: 'absolute', top: 0, right: 0, width: '100px', height: '100px', 
-                background: 'radial-gradient(circle, rgba(16, 185, 129, 0.15), transparent 70%)', borderRadius: '50%', transform: 'translate(30%, -30%)'
-              }} />
-              
               <div style={{ marginBottom: '1.5rem' }}>
                 <span className="badge badge-success" style={{ marginBottom: '0.75rem', display: 'inline-block' }}>
                   {reserve.reserveType || 'Protected Area'}

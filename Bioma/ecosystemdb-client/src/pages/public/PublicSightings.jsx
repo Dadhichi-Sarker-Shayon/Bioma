@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import api from '../../api';
 
 const PublicSightings = () => {
   const [sightings, setSightings] = useState([]);
@@ -11,11 +12,8 @@ const PublicSightings = () => {
 
   const fetchSightings = async () => {
     try {
-      const res = await fetch('http://localhost:5086/api/sightings');
-      if (res.ok) {
-        const data = await res.json();
-        setSightings(data);
-      }
+      const res = await api.get('/sightings');
+      setSightings(res.data);
     } catch (error) {
       console.error("Failed to fetch sightings", error);
     } finally {

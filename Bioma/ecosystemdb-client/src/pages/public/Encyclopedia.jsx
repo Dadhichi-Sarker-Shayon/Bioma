@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import api from '../../api';
 
 const Encyclopedia = () => {
   const [species, setSpecies] = useState([]);
@@ -21,11 +22,8 @@ const Encyclopedia = () => {
 
   const fetchFilters = async () => {
     try {
-      const res = await fetch('http://localhost:5086/api/encyclopedia/filters');
-      if (res.ok) {
-        const data = await res.json();
-        setFilters(data);
-      }
+      const res = await api.get('/encyclopedia/filters');
+      setFilters(res.data);
     } catch (error) {
       console.error("Failed to fetch filters", error);
     }
@@ -34,17 +32,14 @@ const Encyclopedia = () => {
   const fetchSpecies = async () => {
     setLoading(true);
     try {
-      const params = new URLSearchParams();
-      if (search) params.append('search', search);
-      if (selectedStatus) params.append('status', selectedStatus);
-      if (selectedDiet) params.append('diet', selectedDiet);
-      if (selectedTags.length > 0) params.append('tags', selectedTags.join(','));
+      const params = {};
+      if (search) params.search = search;
+      if (selectedStatus) params.status = selectedStatus;
+      if (selectedDiet) params.diet = selectedDiet;
+      if (selectedTags.length > 0) params.tags = selectedTags.join(',');
 
-      const res = await fetch(`http://localhost:5086/api/encyclopedia?${params.toString()}`);
-      if (res.ok) {
-        const data = await res.json();
-        setSpecies(data);
-      }
+      const res = await api.get('/encyclopedia', { params });
+      setSpecies(res.data);
     } catch (error) {
       console.error("Failed to fetch species", error);
     } finally {

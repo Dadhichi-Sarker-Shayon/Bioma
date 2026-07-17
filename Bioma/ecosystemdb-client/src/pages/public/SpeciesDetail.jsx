@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
+import api from '../../api';
 
 const SpeciesDetail = () => {
   const { id } = useParams();
@@ -16,18 +17,14 @@ const SpeciesDetail = () => {
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch(`http://localhost:5086/api/encyclopedia/${id}`);
-      if (res.ok) {
-        const data = await res.json();
-        setSpecies(data);
-      } else if (res.status === 404) {
+      const res = await api.get(`/encyclopedia/${id}`);
+      setSpecies(res.data);
+    } catch (err) {
+      if (err.response?.status === 404) {
         setError('Species not found.');
       } else {
         setError('Failed to load species details.');
       }
-    } catch (error) {
-      console.error("Failed to fetch species details", error);
-      setError('A network error occurred.');
     } finally {
       setLoading(false);
     }
