@@ -56,21 +56,79 @@ namespace Bioma.Controllers
                     tables.Add(row["table_name"]?.ToString() ?? "");
                 }
 
-                return Ok(new 
-                { 
-                    status = "Success", 
-                    message = "Database schema dropped, recreated, compiled, and seeded successfully!", 
+                return Ok(new
+                {
+                    status = "Success",
+                    message = "Database schema dropped, recreated, compiled, and seeded successfully!",
                     tablesCount = tables.Count,
-                    tables = tables 
+                    tables = tables
                 });
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new 
-                { 
-                    status = "Error", 
-                    message = ex.Message, 
-                    stackTrace = ex.StackTrace 
+                return StatusCode(500, new
+                {
+                    status = "Error",
+                    message = ex.Message,
+                    stackTrace = ex.StackTrace
+                });
+            }
+        }
+
+        [HttpPost("populate")]
+        public IActionResult Populate()
+        {
+            try
+            {
+                var results = new List<string>();
+
+                string populatePath = Path.Combine(_env.ContentRootPath, "populate.sql");
+                string additionalPath = Path.Combine(_env.ContentRootPath, "populate_additional.sql");
+
+                if (System.IO.File.Exists(populatePath))
+                {
+                    string sql = System.IO.File.ReadAllText(populatePath);
+                    sql = System.Text.RegularExpressions.Regex.Replace(sql, @"SET\s+DEFINE\s+OFF\s*;", "", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+                    var (exec, skip, err) = _db.ExecuteLargeScript(sql);
+                    results.Add($"populate.sql: {exec} executed, {skip} skipped" + (string.IsNullOrEmpty(err) ? "" : $" (last err: {err})"));
+                }
+
+                if (System.IO.File.Exists(additionalPath))
+                {
+                    string sql = System.IO.File.ReadAllText(additionalPath);
+                    sql = System.Text.RegularExpressions.Regex.Replace(sql, @"SET\s+DEFINE\s+OFF\s*;", "", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+                    var (exec, skip, err) = _db.ExecuteLargeScript(sql);
+                    results.Add($"populate_additional.sql: {exec} executed, {skip} skipped" + (string.IsNullOrEmpty(err) ? "" : $" (last err: {err})"));
+                }
+
+                // Count rows in key tables
+                var speciesCount = _db.Query("SELECT COUNT(*) as cnt FROM Organisms WHERE Rank_Name = 'Species'");
+                var regionCount = _db.Query("SELECT COUNT(*) as cnt FROM Regions");
+                var reserveCount = _db.Query("SELECT COUNT(*) as cnt FROM Reserves");
+                var tagCount = _db.Query("SELECT COUNT(*) as cnt FROM Tags");
+                var distCount = _db.Query("SELECT COUNT(*) as cnt FROM Species_Distribution");
+
+                return Ok(new
+                {
+                    status = "Success",
+                    message = "Data populated successfully!",
+                    steps = results,
+                    counts = new
+                    {
+                        species = speciesCount.Rows[0]["cnt"],
+                        regions = regionCount.Rows[0]["cnt"],
+                        reserves = reserveCount.Rows[0]["cnt"],
+                        tags = tagCount.Rows[0]["cnt"],
+                        distributions = distCount.Rows[0]["cnt"]
+                    }
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new
+                {
+                    status = "Error",
+                    message = ex.Message
                 });
             }
         }

@@ -55,11 +55,11 @@ namespace Bioma.Services
         public void ExecuteSetupScript(string sqlScript)
         {
             var statements = System.Text.RegularExpressions.Regex.Split(
-                sqlScript, 
-                @"^\s*/\s*$", 
+                sqlScript,
+                @"^\s*/\s*$",
                 System.Text.RegularExpressions.RegexOptions.Multiline
             );
-            
+
             using var conn = GetConnection();
             string currentStatement = "";
             try
@@ -76,6 +76,7 @@ namespace Bioma.Services
 
                     currentStatement = stmt;
                     using var cmd = new OracleCommand(stmt, conn);
+                    cmd.CommandTimeout = 300;
                     cmd.ExecuteNonQuery();
                 }
             }
@@ -83,6 +84,60 @@ namespace Bioma.Services
             {
                 throw new InvalidOperationException($"Failed to execute statement:\n{currentStatement}\n\nOracle Error: {ex.Message}", ex);
             }
+        }
+
+        // Executes large populate scripts in batches with fresh connections to avoid timeouts
+        public (int executed, int skipped, string lastError) ExecuteLargeScript(string sqlScript)
+        {
+            // Split by semicolons (individual INSERT statements)
+            var rawStatements = sqlScript.Split(';', StringSplitOptions.RemoveEmptyEntries);
+
+            var batches = new List<string>();
+            foreach (var rawStmt in rawStatements)
+            {
+                var stmt = rawStmt.Trim();
+                if (string.IsNullOrWhiteSpace(stmt)) continue;
+                // Skip SQL*Plus commands
+                if (stmt.StartsWith("SET ", StringComparison.OrdinalIgnoreCase)) continue;
+                if (stmt.StartsWith("EXIT", StringComparison.OrdinalIgnoreCase)) continue;
+                batches.Add(stmt);
+            }
+
+            int executed = 0;
+            int skipped = 0;
+            string lastError = "";
+
+            // Execute in batches of 50 with fresh connections
+            int batchSize = 50;
+            for (int i = 0; i < batches.Count; i += batchSize)
+            {
+                var batch = batches.Skip(i).Take(batchSize);
+                using var conn = GetConnection();
+                foreach (var stmt in batch)
+                {
+                    try
+                    {
+                        using var cmd = new OracleCommand(stmt, conn);
+                        cmd.CommandTimeout = 300;
+                        cmd.ExecuteNonQuery();
+                        executed++;
+                    }
+                    catch (Oracle.ManagedDataAccess.Client.OracleException ox)
+                    {
+                        // ORA-00001 = unique constraint violated, skip duplicate
+                        if (ox.Number == 1)
+                        {
+                            skipped++;
+                        }
+                        else
+                        {
+                            lastError = ox.Message;
+                        }
+                    }
+                }
+            }
+
+            return (executed, skipped, lastError);
         }
 
         // Calls a stored procedure and captures any DBMS_OUTPUT buffer logs generated during execution
